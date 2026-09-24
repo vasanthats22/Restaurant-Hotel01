@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Restaurant & Hotel - Menu</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { background: #FDF9F3; color: #3E2C1B; overflow-x: hidden; width: 100%; max-width: 100vw; padding-top: 100px; }
+        img, video { max-width: 100%; display: block; }
+        a { text-decoration: none; color: inherit; }
+        .section-wrapper { width: 100%; overflow-x: hidden; }
+
+        :root {
+            --cream: #FDF9F3;
+            --white: #FFFFFF;
+            --espresso: #3E2C1B;
+            --espresso-dark: #2A1D10;
+            --terracotta: #B47C4D;
+            --terracotta-dark: #8B5A2B;
+            --gold: #C48B5C;
+            --muted: #7A6B5A;
+            --border: rgba(180, 124, 77, 0.15);
+        }
+
+        .container { width: 92%; max-width: 1280px; margin: 0 auto; }
+        .section { padding: 80px 0; position: relative; }
+
+        .section-header { text-align: center; margin-bottom: 50px; max-width: 720px; margin-left: auto; margin-right: auto; }
+
+        .section-title { font-size: 2.4rem; font-weight: 800; color: var(--espresso); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 14px; }
+        .section-title span { color: var(--terracotta); }
+        .section-subtitle { font-size: 1rem; color: var(--muted); line-height: 1.7; font-weight: 500; }
+
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(180, 124, 77, 0.10); color: var(--terracotta-dark);
+            padding: 8px 18px; border-radius: 30px;
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.2px; margin-bottom: 18px; border: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 30px; border-radius: 50px;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 0.4px;
+            cursor: pointer; transition: all 0.35s ease;
+            border: 2px solid transparent; white-space: nowrap; font-family: inherit;
+        }
+        .btn-primary { background: var(--terracotta); color: #FFFFFF; box-shadow: 0 8px 24px rgba(180, 124, 77, 0.35); }
+        .btn-primary:hover { background: var(--terracotta-dark); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(139, 90, 43, 0.5); }
+        .btn-outline { background: transparent; color: var(--terracotta-dark); border: 2px solid var(--terracotta); }
+        .btn-outline:hover { background: rgba(180, 124, 77, 0.08); transform: translateY(-3px); }
+        .btn-white { background: #FFFFFF; color: var(--espresso); }
+        .btn-white:hover { background: var(--cream); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+        .btn-ghost { background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border: 2px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.25); border-color: #FFFFFF; transform: translateY(-3px); }
+
+        .section-cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 44px; }
+
+        .img-wrap {
+            position: relative;
+            background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%);
+            overflow: hidden;
+        }
+        .img-wrap::before {
+            content: '\f03e'; font-family: 'Font Awesome 6 Free'; font-weight: 400;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 3rem; color: rgba(180, 124, 77, 0.35);
+            pointer-events: none; z-index: 0;
+        }
+        .img-wrap img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .img-wrap.img-loaded::before { display: none; }
+
+        /* ============================================================
+           SECTION 1 — MENU HERO
+           ============================================================ */
+        .menu-hero {
+            position: relative;
+            background: linear-gradient(135deg, #2A1D10 0%, #3E2C1B 100%);
+            padding: 100px 0 120px;
+            overflow: hidden;
+            color: #FFFFFF;
+        }
+        .menu-hero::before {
+            content: '';
+            position: absolute;
+            top: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(180, 124, 77, 0.25), transparent 70%);
+            border-radius: 50%;
+        }
+        .menu-hero::after {
+            content: '\f2e7';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            bottom: -80px; left: -40px;
+            font-size: 22rem;
+            color: rgba(196, 139, 92, 0.06);
+            line-height: 1;
+        }
+        .menu-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .menu-hero-content { max-width: 560px; }
+        .menu-hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(196, 139, 92, 0.2);
+            color: var(--gold);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(196, 139, 92, 0.35);
+        }
+        .menu-hero-title {
+            font-size: 3.6rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+        .menu-hero-title span {
+            background: linear-gradient(135deg, #C48B5C, #FFD9A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .menu-hero-desc {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.75;
+            margin-bottom: 32px;
+        }
+        .menu-hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+        .menu-hero-visual {
+            position: relative;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-hero-plate {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            height: 460px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5), 0 0 0 12px rgba(196, 139, 92, 0.15), 0 0 0 24px rgba(196, 139, 92, 0.08);
+            background: linear-gradient(135deg, #3E2C1B, #2A1D10);
+            animation: slowRotate 30s linear infinite;
+        }
+        @keyframes slowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .menu-hero-plate img { width: 100%; height: 100%; object-fit: cover; }
+        .menu-hero-badge {
+            position: absolute;
+            background: #FFFFFF;
+            color: var(--espresso);
+            padding: 14px 20px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3;
+        }
+        .menu-hero-badge i {
+            width: 40px; height: 40px;
+            background: rgba(180, 124, 77, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terracotta);
+            font-size: 1rem;
+        }
+        .menu-hero-badge strong { display: block; font-size: 0.9rem; font-weight: 800; }
+        .menu-hero-badge span { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+        .menu-hero-badge.badge-1 { top: 20px; left: 0; }
+        .menu-hero-badge.badge-2 { bottom: 30px; right: 0; }
+
+        /* ============================================================
+           SECTION 2 — CATEGORY SHOWCASE (LIGHT VERSION)
+           ============================================================ */
+        .category-showcase {
+            background: linear-gradient(180deg, #FDF9F3 0%, #F5EDE3 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+        .category-showcase::before {
+            content: '';
+            position: absolute;
+            bottom: -100px; left: -100px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(180, 124, 77, 0.1), transparent 70%);
+            border-radius: 50%;
+        }
+        .category-showcase::after {
+            content: '';
+            position: absolute;
+            top: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(196, 139, 92, 0.08), transparent 70%);
+            border-radius: 50%;
+        }
+        .category-showcase-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left: Big feature card */
+        .cat-feature {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 580px;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            box-shadow: 0 30px 80px rgba(62, 44, 27, 0.2);
+        }
+        .cat-feature-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .cat-feature:hover .cat-feature-img {
+            transform: scale(1.05);
+        }
+        .cat-feature-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(42, 29, 16, 0.96) 0%, rgba(42, 29, 16, 0.35) 50%, transparent 100%);
+        }
+        .cat-feature-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            color: #FFFFFF;
+        }
+        .cat-feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(196, 139, 92, 0.3);
+            border: 1px solid rgba(196, 139, 92, 0.6);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #FFD9A8;
+            margin-bottom: 16px;
+            width: fit-content;
+            backdrop-filter: blur(6px);
+        }
+        .cat-feature-content h3 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        .cat-feature-content p {
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 22px;
+            max-width: 420px;
+        }
+        .cat-feature-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .cat-feature-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+        .cat-feature-meta-item i { color: var(--gold); font-size: 0.85rem; }
+
+        /* Right: Category list — LIGHT STYLED */
+        .cat-list-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--terracotta-dark);
+            margin-bottom: 20px;
+        }
+        .cat-list-head i { font-size: 0.85rem; color: var(--terracotta); }
+        .cat-list-head::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(180, 124, 77, 0.25);
+        }
+
+        .cat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .cat-list-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 12px;
+            border-radius: 14px;
+            transition: all 0.35s ease;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(180, 124, 77, 0.15);
+            position: relative;
+            color: var(--espresso);
+        }
+        .cat-list-item:last-child { border-bottom: none; }
+        .cat-list-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: left;
+            width: 3px;
+            height: 60%;
+            background: var(--terracotta);
+            border-radius: 3px;
+            transition: transform 0.35s ease;
+        }
+        .cat-list-item:hover {
+            background: var(--white);
+            padding-left: 24px;
+            box-shadow: 0 10px 30px rgba(180, 124, 77, 0.1);
+        }
+        .cat-list-item:hover::before {
+            transform: translateY(-50%) scaleX(1);
+        }
+        .cat-list-num {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: rgba(180, 124, 77, 0.5);
+            font-variant-numeric: tabular-nums;
+            min-width: 24px;
+        }
+        .cat-list-item:hover .cat-list-num { color: var(--terracotta); }
+        .cat-list-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--espresso);
+            letter-spacing: -0.2px;
+            transition: color 0.3s ease;
+        }
+        .cat-list-item:hover .cat-list-name { color: var(--terracotta-dark); }
+        .cat-list-count {
+            font-size: 0.72rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .cat-list-arrow {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(180, 124, 77, 0.12);
+            border: 1px solid rgba(180, 124, 77, 0.25);
+            color: var(--terracotta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.35s ease;
+            flex-shrink: 0;
+        }
+        .cat-list-item:hover .cat-list-arrow {
+            background: var(--terracotta);
+            border-color: var(--terracotta);
+            color: #FFFFFF;
+            transform: rotate(-45deg);
+        }
+
+        /* ============================================================
+           SECTION 3 — SIGNATURE STARTERS
+           ============================================================ */
+        .starters {
+            background: var(--white);
+            padding: 90px 0;
+        }
+        .starters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .starter-card {
+            display: grid;
+            grid-template-columns: 220px 1fr auto;
+            gap: 24px;
+            align-items: center;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 18px rgba(62, 44, 27, 0.04);
+        }
+        .starter-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 20px 50px rgba(180, 124, 77, 0.18);
+            border-color: rgba(180, 124, 77, 0.35);
+        }
+        .starter-card:nth-child(even) {
+            grid-template-columns: auto 1fr 220px;
+        }
+        .starter-card:nth-child(even) .starter-img { order: 3; }
+        .starter-img {
+            width: 220px;
+            height: 160px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            position: relative;
+        }
+        .starter-img img { width: 100%; height: 100%; object-fit: cover; }
+        .starter-body h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 6px;
+        }
+        .starter-body p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .starter-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .starter-tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(180, 124, 77, 0.1);
+            color: var(--terracotta-dark);
+        }
+        .starter-tag-pill.veg { background: rgba(34, 197, 94, 0.12); color: #15803D; }
+        .starter-tag-pill.spicy { background: rgba(220, 38, 38, 0.1); color: #991B1B; }
+        .starter-tag-pill.chef { background: rgba(196, 139, 92, 0.2); color: #8B5A2B; }
+        .starter-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .starter-rating span { color: var(--muted); font-weight: 600; margin-left: 3px; }
+        .starter-price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -1px;
+        }
+        .starter-price small { font-size: 0.7rem; color: var(--muted); display: block; font-weight: 500; letter-spacing: 0; margin-top: 2px; }
+
+        /* ============================================================
+           SECTION 4 — MAIN COURSE TILES
+           ============================================================ */
+        .main-course {
+            background: var(--white);
+            padding: 90px 0;
+        }
+        .main-course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 26px;
+        }
+        .mc-tile {
+            position: relative;
+            border-radius: 22px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            height: 440px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .mc-tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .mc-tile:hover img { transform: scale(1.1); }
+        .mc-tile-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(42, 29, 16, 0.95) 0%, rgba(42, 29, 16, 0.15) 55%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 28px;
+            color: #FFFFFF;
+        }
+        .mc-tile-cat {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(196, 139, 92, 0.3);
+            border: 1px solid rgba(196, 139, 92, 0.6);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #FFD9A8;
+            margin-bottom: 12px;
+            width: fit-content;
+            backdrop-filter: blur(6px);
+        }
+        .mc-tile-overlay h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
+        .mc-tile-overlay p { font-size: 0.82rem; color: rgba(255, 255, 255, 0.75); line-height: 1.5; margin-bottom: 16px; }
+        .mc-tile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .mc-tile-price {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #FFD9A8;
+            letter-spacing: -0.5px;
+        }
+        .mc-tile-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+        .mc-tile:hover .mc-tile-btn { background: var(--terracotta); border-color: var(--terracotta); }
+
+        /* ============================================================
+           SECTION 5 — CHEF'S RECOMMENDATION
+           ============================================================ */
+        .chef-rec {
+            background: linear-gradient(135deg, #F5EDE3 0%, #FDF9F3 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .chef-rec::before {
+            content: 'CHEF';
+            position: absolute;
+            top: 40px; left: -20px;
+            font-size: 12rem;
+            font-weight: 900;
+            color: rgba(180, 124, 77, 0.06);
+            letter-spacing: -8px;
+            line-height: 0.8;
+            z-index: 0;
+        }
+        .chef-rec-inner {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .chef-rec-content { max-width: 560px; }
+        .chef-rec-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            border: 2px solid var(--terracotta);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--terracotta-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(180, 124, 77, 0.15);
+        }
+        .chef-rec-badge i { color: var(--gold); }
+        .chef-rec-title {
+            font-size: 2.6rem;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            color: var(--espresso);
+            margin-bottom: 16px;
+        }
+        .chef-rec-title span { color: var(--terracotta); }
+        .chef-rec-desc {
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 26px;
+        }
+        .chef-rec-stats {
+            display: flex;
+            gap: 26px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        .chef-rec-stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chef-rec-stat i {
+            width: 40px; height: 40px;
+            background: rgba(180, 124, 77, 0.12);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terracotta);
+            font-size: 1rem;
+        }
+        .chef-rec-stat strong { font-size: 1rem; font-weight: 800; color: var(--espresso); display: block; }
+        .chef-rec-stat span { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+        .chef-rec-visual {
+            position: relative;
+            height: 520px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(62, 44, 27, 0.2);
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+        }
+        .chef-rec-visual img { width: 100%; height: 100%; object-fit: cover; }
+        .chef-rec-float {
+            position: absolute;
+            bottom: 24px;
+            left: -30px;
+            background: var(--white);
+            border-radius: 18px;
+            padding: 18px 22px;
+            box-shadow: 0 20px 50px rgba(62, 44, 27, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-left: 4px solid var(--terracotta);
+            max-width: 260px;
+            z-index: 3;
+        }
+        .chef-rec-float-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: rgba(180, 124, 77, 0.15);
+            flex-shrink: 0;
+            position: relative;
+        }
+        .chef-rec-float-avatar::before {
+            content: '\f007';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(180, 124, 77, 0.6);
+            z-index: 0;
+        }
+        .chef-rec-float-avatar img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .chef-rec-float-text strong { display: block; font-size: 0.88rem; font-weight: 800; color: var(--espresso); }
+        .chef-rec-float-text span { font-size: 0.68rem; color: var(--muted); font-weight: 600; }
+
+        /* ============================================================
+           SECTION 6 — DESSERTS
+           ============================================================ */
+        .desserts {
+            background: var(--white);
+            padding: 90px 0;
+        }
+        .desserts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            align-items: end;
+        }
+        .dessert-card {
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .dessert-card:nth-child(even) { margin-top: 40px; }
+        .dessert-circle {
+            width: 100%;
+            aspect-ratio: 1/1;
+            max-width: 220px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            box-shadow: 0 20px 50px rgba(62, 44, 27, 0.12);
+            border: 8px solid var(--white);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .dessert-card:hover .dessert-circle {
+            transform: translateY(-10px) rotate(-3deg);
+            box-shadow: 0 30px 70px rgba(180, 124, 77, 0.3);
+            border-color: var(--terracotta);
+        }
+        .dessert-circle img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .dessert-card:hover .dessert-circle img { transform: scale(1.15); }
+        .dessert-card h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 6px;
+        }
+        .dessert-card p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .dessert-price {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -0.3px;
+        }
+
+        /* ============================================================
+           SECTION 7 — DRINKS
+           ============================================================ */
+        .drinks {
+            background: linear-gradient(180deg, #F5EDE3 0%, #FDF9F3 100%);
+            padding: 90px 0;
+        }
+        .drinks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        .drink-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 18px rgba(62, 44, 27, 0.04);
+        }
+        .drink-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(180, 124, 77, 0.18);
+            border-color: rgba(180, 124, 77, 0.35);
+        }
+        .drink-icon {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            position: relative;
+            box-shadow: 0 8px 20px rgba(62, 44, 27, 0.1);
+        }
+        .drink-icon::before {
+            content: '\f000';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 400;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: rgba(180, 124, 77, 0.35);
+            z-index: 0;
+        }
+        .drink-icon img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .drink-body { flex: 1; }
+        .drink-body h4 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 4px;
+        }
+        .drink-body p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .drink-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .drink-tag {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            background: rgba(180, 124, 77, 0.1);
+            color: var(--terracotta-dark);
+        }
+        .drink-tag.hot { background: rgba(220, 38, 38, 0.1); color: #991B1B; }
+        .drink-tag.cold { background: rgba(59, 130, 246, 0.1); color: #1E40AF; }
+        .drink-tag.premium { background: rgba(196, 139, 92, 0.2); color: #8B5A2B; }
+        .drink-price {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -0.5px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .drink-price small { display: block; font-size: 0.65rem; color: var(--muted); font-weight: 500; letter-spacing: 0; margin-top: 2px; }
+
+        /* ============================================================
+           SECTION 8 — DOWNLOAD MENU CTA
+           ============================================================ */
+        .download-menu {
+            background: var(--espresso);
+            color: #FFFFFF;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .download-menu::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(196, 139, 92, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(196, 139, 92, 0.06) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        .download-menu::after {
+            content: '';
+            position: absolute;
+            top: -150px; right: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(180, 124, 77, 0.2), transparent 70%);
+            border-radius: 50%;
+        }
+        .download-menu-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .download-menu-content { max-width: 620px; }
+        .download-menu-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(196, 139, 92, 0.2);
+            color: var(--gold);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(196, 139, 92, 0.35);
+        }
+        .download-menu h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+        .download-menu h2 span {
+            background: linear-gradient(135deg, #C48B5C, #FFD9A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .download-menu p {
+            font-size: 1.02rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin-bottom: 34px;
+        }
+        .download-menu-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .download-menu-visual {
+            display: flex;
+            justify-content: center;
+        }
+        .download-menu-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(196, 139, 92, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 320px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .download-menu-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #FFFFFF;
+            margin: 0 auto 20px;
+            box-shadow: 0 12px 30px rgba(180, 124, 77, 0.4);
+        }
+        .download-menu-card h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .download-menu-card p {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .download-menu-card .btn {
+            width: 100%;
+        }
+
+        /* ============================================================
+           RESPONSIVE — TABLET (1024px)
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .menu-hero-inner { grid-template-columns: 1fr; gap: 50px; }
+            .menu-hero-visual { height: 400px; }
+            .menu-hero-plate { max-width: 380px; height: 380px; }
+            .menu-hero-title { font-size: 2.8rem; }
+
+            .category-showcase-inner { grid-template-columns: 1fr; gap: 50px; }
+            .cat-feature { height: 460px; }
+            .cat-feature-content h3 { font-size: 2rem; }
+
+            .main-course-grid { grid-template-columns: 1fr 1fr; }
+
+            .chef-rec-inner { grid-template-columns: 1fr; gap: 40px; }
+            .chef-rec-visual { height: 440px; }
+            .chef-rec-float { left: 20px; }
+
+            .desserts-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+            .dessert-card:nth-child(even) { margin-top: 0; }
+
+            .drinks-grid { grid-template-columns: 1fr; }
+
+            .download-menu-inner { grid-template-columns: 1fr; gap: 40px; }
+            .download-menu-visual { justify-content: flex-start; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — MOBILE (768px)
+           ============================================================ */
+        @media (max-width: 768px) {
+            body { padding-top: 90px; }
+            .section { padding: 60px 0; }
+            .section-title { font-size: 1.7rem; }
+            .section-subtitle { font-size: 0.9rem; }
+            .section-header { margin-bottom: 36px; }
+            .section-cta { margin-top: 32px; }
+
+            .menu-hero { padding: 60px 0 80px; }
+            .menu-hero-title { font-size: 2.1rem; letter-spacing: -1px; }
+            .menu-hero-desc { font-size: 0.92rem; }
+            .menu-hero-buttons { flex-direction: column; align-items: stretch; }
+            .menu-hero-buttons .btn { width: 100%; }
+            .menu-hero-visual { height: 320px; }
+            .menu-hero-plate { max-width: 300px; height: 300px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(196, 139, 92, 0.15), 0 0 0 16px rgba(196, 139, 92, 0.08); }
+            .menu-hero-badge { padding: 10px 14px; gap: 10px; }
+            .menu-hero-badge i { width: 34px; height: 34px; font-size: 0.85rem; }
+            .menu-hero-badge strong { font-size: 0.78rem; }
+            .menu-hero-badge span { font-size: 0.62rem; }
+            .menu-hero-badge.badge-1 { top: 0; left: 0; }
+            .menu-hero-badge.badge-2 { bottom: 10px; right: 0; }
+            .menu-hero::after { font-size: 12rem; }
+
+            /* Category showcase */
+            .category-showcase { padding: 60px 0; }
+            .category-showcase-inner { gap: 36px; }
+            .cat-feature { height: 380px; }
+            .cat-feature-content { padding: 26px; }
+            .cat-feature-content h3 { font-size: 1.55rem; }
+            .cat-feature-content p { font-size: 0.82rem; margin-bottom: 16px; }
+            .cat-feature-meta { gap: 14px; margin-bottom: 18px; }
+            .cat-feature-meta-item { font-size: 0.72rem; }
+            .cat-list-item { grid-template-columns: auto 1fr auto; gap: 14px; padding: 14px 10px; }
+            .cat-list-count { display: none; }
+            .cat-list-name { font-size: 0.95rem; }
+            .cat-list-arrow { width: 30px; height: 30px; font-size: 0.7rem; }
+            .cat-list-head { font-size: 0.7rem; }
+
+            .starters { padding: 60px 0; }
+            .starter-card,
+            .starter-card:nth-child(even) {
+                grid-template-columns: 1fr;
+                padding: 16px;
+                gap: 16px;
+            }
+            .starter-card:nth-child(even) .starter-img { order: 0; }
+            .starter-img { width: 100%; height: 180px; }
+            .starter-body h3 { font-size: 1.05rem; }
+            .starter-body p { font-size: 0.78rem; }
+            .starter-price { font-size: 1.3rem; }
+
+            .main-course { padding: 60px 0; }
+            .main-course-grid { grid-template-columns: 1fr; gap: 18px; }
+            .mc-tile { height: 340px; }
+            .mc-tile-overlay h3 { font-size: 1.2rem; }
+            .mc-tile-overlay p { font-size: 0.78rem; }
+
+            .chef-rec { padding: 60px 0; }
+            .chef-rec::before { font-size: 6rem; top: 20px; left: -10px; }
+            .chef-rec-title { font-size: 1.8rem; }
+            .chef-rec-desc { font-size: 0.9rem; }
+            .chef-rec-stats { gap: 18px; }
+            .chef-rec-visual { height: 340px; }
+            .chef-rec-float { position: static; margin-top: 14px; left: 0; max-width: 100%; }
+            .chef-rec-content .btn { width: 100%; }
+
+            .desserts { padding: 60px 0; }
+            .desserts-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+            .dessert-circle { max-width: 160px; border-width: 6px; margin-bottom: 14px; }
+            .dessert-card h3 { font-size: 0.92rem; }
+            .dessert-card p { font-size: 0.72rem; }
+            .dessert-price { font-size: 0.95rem; }
+
+            .drinks { padding: 60px 0; }
+            .drink-card { padding: 16px; gap: 14px; }
+            .drink-icon { width: 64px; height: 64px; min-width: 64px; }
+            .drink-icon::before { font-size: 1.6rem; }
+            .drink-body h4 { font-size: 0.95rem; }
+            .drink-body p { font-size: 0.72rem; }
+            .drink-price { font-size: 1.1rem; }
+
+            .download-menu { padding: 70px 0; }
+            .download-menu h2 { font-size: 1.9rem; letter-spacing: -1px; }
+            .download-menu p { font-size: 0.9rem; }
+            .download-menu-buttons { flex-direction: column; align-items: stretch; }
+            .download-menu-buttons .btn { width: 100%; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — SMALL MOBILE (480px)
+           ============================================================ */
+        @media (max-width: 480px) {
+            body { padding-top: 80px; }
+            .section { padding: 50px 0; }
+            .section-title { font-size: 1.45rem; }
+            .section-tag { font-size: 0.68rem; padding: 6px 14px; }
+
+            .menu-hero-title { font-size: 1.7rem; }
+            .menu-hero-visual { height: 280px; }
+            .menu-hero-plate { max-width: 260px; height: 260px; }
+            .menu-hero-badge.badge-1 { display: none; }
+
+            /* Category showcase */
+            .cat-feature { height: 320px; }
+            .cat-feature-content { padding: 20px; }
+            .cat-feature-content h3 { font-size: 1.3rem; }
+            .cat-feature-content p { font-size: 0.75rem; }
+            .cat-feature-meta { display: none; }
+            .cat-list-item { padding: 12px 8px; gap: 10px; }
+            .cat-list-num { font-size: 0.65rem; }
+            .cat-list-name { font-size: 0.85rem; }
+            .cat-list-arrow { width: 26px; height: 26px; font-size: 0.6rem; }
+
+            .starter-img { height: 160px; }
+
+            .mc-tile { height: 300px; }
+            .mc-tile-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            .chef-rec-title { font-size: 1.5rem; }
+            .chef-rec-stats { flex-direction: column; gap: 12px; }
+
+            .desserts-grid { grid-template-columns: 1fr; gap: 24px; }
+            .dessert-circle { max-width: 200px; }
+
+            .drink-card { flex-direction: column; align-items: flex-start; }
+            .drink-icon { width: 60px; height: 60px; min-width: 60px; }
+            .drink-price { text-align: left; margin-top: 6px; }
+
+            .download-menu h2 { font-size: 1.5rem; }
+            .download-menu-card { padding: 24px; }
+        }
+
+        /* ============================================================
+           GUARANTEE — NO HORIZONTAL SCROLL
+           ============================================================ */
+        @media (max-width: 1024px) {
+            html, body { overflow-x: hidden !important; max-width: 100vw; }
+            .section-wrapper, .container, section { max-width: 100vw; }
+            img, video, iframe { max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER PLACEHOLDER ===== -->
+    <div id="header-placeholder"></div>
+
+    <!-- ============================================================
+         SECTION 1 — MENU HERO
+         ============================================================ -->
+    <section class="menu-hero section-wrapper">
+        <div class="container">
+            <div class="menu-hero-inner">
+                <div class="menu-hero-content" data-aos="fade-right" data-aos-duration="900">
+                    <div class="menu-hero-tag">
+                        <i class="fa-solid fa-book-open"></i> Our Full Menu
+                    </div>
+                    <h1 class="menu-hero-title" data-aos="fade-up" data-aos-delay="100">
+                        Every Bite is a <span>New Adventure</span>
+                    </h1>
+                    <p class="menu-hero-desc" data-aos="fade-up" data-aos-delay="200">
+                        From starters to desserts — explore over 86 handcrafted dishes, each prepared with the finest ingredients and a touch of artistry.
+                    </p>
+                    <div class="menu-hero-buttons" data-aos="fade-up" data-aos-delay="300">
+                        <a href="404.html" class="btn btn-primary">
+                            <i class="fa-solid fa-download"></i> Download Menu
+                        </a>
+                        <a href="404.html" class="btn btn-ghost">
+                            <i class="fa-solid fa-calendar-check"></i> Reserve Table
+                        </a>
+                    </div>
+                </div>
+
+                <div class="menu-hero-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="menu-hero-plate img-wrap">
+                        <img src="dish14.webp" alt="Signature dish"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="menu-hero-badge badge-1">
+                        <i class="fa-solid fa-star"></i>
+                        <div>
+                            <strong>4.9 Rating</strong>
+                            <span>2,400+ reviews</span>
+                        </div>
+                    </div>
+                    <div class="menu-hero-badge badge-2">
+                        <i class="fa-solid fa-utensils"></i>
+                        <div>
+                            <strong>86 Dishes</strong>
+                            <span>Handcrafted daily</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2 — CATEGORY SHOWCASE (LIGHT VERSION)
+         ============================================================ -->
+    <section class="category-showcase section-wrapper">
+        <div class="container">
+            <div class="category-showcase-inner">
+
+                <!-- Left: Big featured visual -->
+                <div class="cat-feature" data-aos="fade-right" data-aos-duration="1000">
+                    <img class="cat-feature-img" src="dish10.webp" alt="Featured category"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&auto=format&fit=crop';" />
+                    <div class="cat-feature-overlay"></div>
+                    <div class="cat-feature-content">
+                        <div class="cat-feature-tag">
+                            <i class="fa-solid fa-crown"></i> Featured Category
+                        </div>
+                        <h3>Chef's Signature Selection</h3>
+                        <p>A handpicked collection of our finest dishes from every category — perfect for first-timers and food lovers.</p>
+                        <div class="cat-feature-meta">
+                            <div class="cat-feature-meta-item">
+                                <i class="fa-solid fa-utensils"></i>
+                                <span>86 Dishes</span>
+                            </div>
+                            <div class="cat-feature-meta-item">
+                                <i class="fa-solid fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                            <div class="cat-feature-meta-item">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Updated Weekly</span>
+                            </div>
+                        </div>
+                        <a href="404.html" class="btn btn-white">
+                            <i class="fa-solid fa-arrow-right"></i> Explore Selection
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Category list -->
+                <div data-aos="fade-left" data-aos-duration="1000">
+                    <div class="cat-list-head">
+                        <i class="fa-solid fa-compass"></i>
+                        <span>Browse Categories</span>
+                    </div>
+
+                    <div class="cat-list">
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="100">
+                            <span class="cat-list-num">01</span>
+                            <span class="cat-list-name">Starters</span>
+                            <span class="cat-list-count">14 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="150">
+                            <span class="cat-list-num">02</span>
+                            <span class="cat-list-name">Main Course</span>
+                            <span class="cat-list-count">22 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="200">
+                            <span class="cat-list-num">03</span>
+                            <span class="cat-list-name">Pizza</span>
+                            <span class="cat-list-count">10 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="250">
+                            <span class="cat-list-num">04</span>
+                            <span class="cat-list-name">Seafood</span>
+                            <span class="cat-list-count">12 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="300">
+                            <span class="cat-list-num">05</span>
+                            <span class="cat-list-name">Desserts</span>
+                            <span class="cat-list-count">16 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="350">
+                            <span class="cat-list-num">06</span>
+                            <span class="cat-list-name">Wines</span>
+                            <span class="cat-list-count">24 Labels</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="400">
+                            <span class="cat-list-num">07</span>
+                            <span class="cat-list-name">Beverages</span>
+                            <span class="cat-list-count">18 Options</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+
+                        <a href="404.html" class="cat-list-item" data-aos="fade-up" data-aos-delay="450">
+                            <span class="cat-list-num">08</span>
+                            <span class="cat-list-name">Vegan</span>
+                            <span class="cat-list-count">8 Dishes</span>
+                            <div class="cat-list-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — SIGNATURE STARTERS
+         ============================================================ -->
+    <section class="starters section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-plate-wheat"></i> Fresh Beginnings</div>
+                <h2 class="section-title">Signature <span>Starters</span></h2>
+                <p class="section-subtitle">Light, elegant appetisers to awaken your palate and set the tone for the meal ahead.</p>
+            </div>
+
+            <div class="starters-list">
+                <div class="starter-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="starter-img img-wrap">
+                        <img src="dish11.webp" alt="Bruschetta"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1506280754576-f6fa8a873550?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <div class="starter-body">
+                        <h3>Tomato Bruschetta</h3>
+                        <p>Toasted artisan bread, marinated tomatoes, fresh basil and aged balsamic.</p>
+                        <div class="starter-meta">
+                            <span class="starter-tag-pill veg"><i class="fa-solid fa-leaf"></i> Veg</span>
+                            <span class="starter-tag-pill chef"><i class="fa-solid fa-hat-cowboy"></i> Chef's Pick</span>
+                            <div class="starter-rating">
+                                <i class="fa-solid fa-star"></i>
+                                <span>4.8 (324)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="starter-price">
+                        $12
+                        <small>per plate</small>
+                    </div>
+                </div>
+
+                <div class="starter-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="starter-img img-wrap">
+                        <img src="dish12.webp" alt="Calamari"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <div class="starter-body">
+                        <h3>Crispy Calamari</h3>
+                        <p>Lightly fried squid rings with zesty lemon aioli and fresh herbs.</p>
+                        <div class="starter-meta">
+                            <span class="starter-tag-pill"><i class="fa-solid fa-fish"></i> Seafood</span>
+                            <span class="starter-tag-pill spicy"><i class="fa-solid fa-pepper-hot"></i> Mild</span>
+                            <div class="starter-rating">
+                                <i class="fa-solid fa-star"></i>
+                                <span>4.7 (186)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="starter-price">
+                        $16
+                        <small>per plate</small>
+                    </div>
+                </div>
+
+                <div class="starter-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="starter-img img-wrap">
+                        <img src="dish13.webp" alt="Soup"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1547592180-85f173990554?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <div class="starter-body">
+                        <h3>Roasted Pumpkin Soup</h3>
+                        <p>Velvety pumpkin soup with toasted seeds and a hint of nutmeg.</p>
+                        <div class="starter-meta">
+                            <span class="starter-tag-pill veg"><i class="fa-solid fa-leaf"></i> Veg</span>
+                            <span class="starter-tag-pill"><i class="fa-solid fa-fire"></i> Warm</span>
+                            <div class="starter-rating">
+                                <i class="fa-solid fa-star"></i>
+                                <span>4.9 (240)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="starter-price">
+                        $14
+                        <small>per bowl</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-right"></i> View All Starters
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4 — MAIN COURSE TILES
+         ============================================================ -->
+    <section class="main-course section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-drumstick-bite"></i> Hearty Mains</div>
+                <h2 class="section-title">Main <span>Course</span></h2>
+                <p class="section-subtitle">Bold, satisfying dishes that celebrate seasonal ingredients and time-honoured techniques.</p>
+            </div>
+
+            <div class="main-course-grid">
+                <div class="mc-tile" data-aos="fade-up" data-aos-delay="100">
+                    <img src="dish14.webp" alt="Filet Mignon"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop';" />
+                    <div class="mc-tile-overlay">
+                        <div class="mc-tile-cat"><i class="fa-solid fa-crown"></i> Signature</div>
+                        <h3>Filet Mignon</h3>
+                        <p>Premium grass-fed beef, truffle mash, red wine reduction.</p>
+                        <div class="mc-tile-footer">
+                            <div class="mc-tile-price">$48</div>
+                            <a href="404.html" class="mc-tile-btn">
+                                Order <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mc-tile" data-aos="fade-up" data-aos-delay="200">
+                    <img src="dish15.webp" alt="Salmon"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&auto=format&fit=crop';" />
+                    <div class="mc-tile-overlay">
+                        <div class="mc-tile-cat"><i class="fa-solid fa-fish"></i> Seafood</div>
+                        <h3>Atlantic Salmon</h3>
+                        <p>Pan-seared salmon, lemon butter, seasonal greens.</p>
+                        <div class="mc-tile-footer">
+                            <div class="mc-tile-price">$32</div>
+                            <a href="404.html" class="mc-tile-btn">
+                                Order <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mc-tile" data-aos="fade-up" data-aos-delay="300">
+                    <img src="dish16.webp" alt="Risotto"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&auto=format&fit=crop';" />
+                    <div class="mc-tile-overlay">
+                        <div class="mc-tile-cat"><i class="fa-solid fa-leaf"></i> Vegetarian</div>
+                        <h3>Wild Mushroom Risotto</h3>
+                        <p>Creamy Arborio rice, wild mushrooms, parmesan, truffle oil.</p>
+                        <div class="mc-tile-footer">
+                            <div class="mc-tile-price">$26</div>
+                            <a href="404.html" class="mc-tile-btn">
+                                Order <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-outline">
+                    <i class="fa-solid fa-book-open"></i> Explore Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5 — CHEF'S RECOMMENDATION
+         ============================================================ -->
+    <section class="chef-rec section-wrapper">
+        <div class="container">
+            <div class="chef-rec-inner">
+                <div class="chef-rec-content" data-aos="fade-right" data-aos-duration="900">
+                    <div class="chef-rec-badge">
+                        <i class="fa-solid fa-hat-cowboy"></i> Chef Recommends
+                    </div>
+                    <h2 class="chef-rec-title">The <span>Tasting Menu</span> Experience</h2>
+                    <p class="chef-rec-desc">
+                        A seven-course journey curated by Chef Marco — each dish tells a story from a different region of Italy, paired with handpicked wines.
+                    </p>
+
+                    <div class="chef-rec-stats">
+                        <div class="chef-rec-stat">
+                            <i class="fa-solid fa-utensils"></i>
+                            <div>
+                                <strong>7 Courses</strong>
+                                <span>Full tasting journey</span>
+                            </div>
+                        </div>
+                        <div class="chef-rec-stat">
+                            <i class="fa-solid fa-clock"></i>
+                            <div>
+                                <strong>2.5 Hours</strong>
+                                <span>Relaxed pace</span>
+                            </div>
+                        </div>
+                        <div class="chef-rec-stat">
+                            <i class="fa-solid fa-wine-glass"></i>
+                            <div>
+                                <strong>Wine Pairing</strong>
+                                <span>Optional +$35</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="404.html" class="btn btn-primary">
+                        <i class="fa-solid fa-star"></i> Book Tasting Menu
+                    </a>
+                </div>
+
+                <div class="chef-rec-visual img-wrap" data-aos="fade-left" data-aos-duration="1000">
+                    <img src="dish17.webp" alt="Tasting menu"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&auto=format&fit=crop';" />
+                    <div class="chef-rec-float">
+                        <div class="chef-rec-float-avatar">
+                            <img src="dish18.webp" alt="Chef"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&auto=format&fit=crop';" />
+                        </div>
+                        <div class="chef-rec-float-text">
+                            <strong>Chef Marco</strong>
+                            <span>Head Chef</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6 — DESSERTS
+         ============================================================ -->
+    <section class="desserts section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-ice-cream"></i> Sweet Endings</div>
+                <h2 class="section-title">Decadent <span>Desserts</span></h2>
+                <p class="section-subtitle">Handcrafted sweet treats to finish your meal on a perfect note.</p>
+            </div>
+
+            <div class="desserts-grid">
+                <div class="dessert-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="dessert-circle img-wrap">
+                        <img src="dish19.webp" alt="Chocolate Fondant"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <h3>Chocolate Fondant</h3>
+                    <p>Warm molten centre, vanilla ice cream</p>
+                    <div class="dessert-price">$14</div>
+                </div>
+
+                <div class="dessert-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="dessert-circle img-wrap">
+                        <img src="dish20.webp" alt="Cheesecake"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <h3>New York Cheesecake</h3>
+                    <p>Berry compote, whipped cream</p>
+                    <div class="dessert-price">$12</div>
+                </div>
+
+                <div class="dessert-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="dessert-circle img-wrap">
+                        <img src="dish1.webp" alt="Tiramisu"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <h3>Classic Tiramisu</h3>
+                    <p>Espresso-soaked ladyfingers, mascarpone</p>
+                    <div class="dessert-price">$13</div>
+                </div>
+
+                <div class="dessert-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="dessert-circle img-wrap">
+                        <img src="dish2.webp" alt="Crème Brûlée"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <h3>Crème Brûlée</h3>
+                    <p>Vanilla custard, caramelised sugar</p>
+                    <div class="dessert-price">$12</div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-primary">
+                    <i class="fa-solid fa-ice-cream"></i> See All Desserts
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 7 — DRINKS / BEVERAGES
+         ============================================================ -->
+    <section class="drinks section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-wine-glass"></i> Sip & Savor</div>
+                <h2 class="section-title">Drinks &amp; <span>Beverages</span></h2>
+                <p class="section-subtitle">From artisan cocktails to single-origin coffees — crafted to complement every dish.</p>
+            </div>
+
+            <div class="drinks-grid">
+                <div class="drink-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="drink-icon img-wrap">
+                        <img src="dish3.webp" alt="Signature Cocktail"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=400&auto=format&fit=crop';" />
+                    </div>
+                    <div class="drink-body">
+                        <h4>Golden Sunset</h4>
+                        <p>House-signature cocktail with bourbon, honey and citrus.</p>
+                        <div class="drink-tags">
+                            <span class="drink-tag premium">Premium</span>
+                            <span class="drink-tag">Signature</span>
+                        </div>
+                    </div>
+                    <div class="drink-price">$18<small>per glass</small></div>
+                </div>
+
+                <div class="drink-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="drink-icon img-wrap">
+                        <img src="dish4.webp" alt="Red Wine"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&auto=format&fit=crop';" />
+                    </div>
+                    <div class="drink-body">
+                        <h4>Château Reserve</h4>
+                        <p>2018 Bordeaux · deep oak notes with a smooth finish.</p>
+                        <div class="drink-tags">
+                            <span class="drink-tag premium">Premium</span>
+                            <span class="drink-tag">Aged 6 Years</span>
+                        </div>
+                    </div>
+                    <div class="drink-price">$24<small>per glass</small></div>
+                </div>
+
+                <div class="drink-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="drink-icon img-wrap">
+                        <img src="dish5.webp" alt="Coffee"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop';" />
+                    </div>
+                    <div class="drink-body">
+                        <h4>Espresso Romano</h4>
+                        <p>Double-shot espresso with a twist of lemon peel.</p>
+                        <div class="drink-tags">
+                            <span class="drink-tag hot">Hot</span>
+                            <span class="drink-tag">Classic</span>
+                        </div>
+                    </div>
+                    <div class="drink-price">$6<small>per cup</small></div>
+                </div>
+
+                <div class="drink-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="drink-icon img-wrap">
+                        <img src="dish6.webp" alt="Fresh Juice"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&auto=format&fit=crop';" />
+                    </div>
+                    <div class="drink-body">
+                        <h4>Cold-Pressed Detox</h4>
+                        <p>Fresh apple, celery, cucumber and mint blend.</p>
+                        <div class="drink-tags">
+                            <span class="drink-tag cold">Cold</span>
+                            <span class="drink-tag">Vegan</span>
+                        </div>
+                    </div>
+                    <div class="drink-price">$9<small>per glass</small></div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-outline">
+                    <i class="fa-solid fa-wine-bottle"></i> View Full Beverage List
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 8 — DOWNLOAD MENU CTA
+         ============================================================ -->
+    <section class="download-menu section-wrapper">
+        <div class="container">
+            <div class="download-menu-inner">
+                <div class="download-menu-content" data-aos="fade-right" data-aos-duration="900">
+                    <div class="download-menu-tag">
+                        <i class="fa-solid fa-file-pdf"></i> Full Menu PDF
+                    </div>
+                    <h2 data-aos="fade-up" data-aos-delay="100">
+                        Take Our Menu <span>Anywhere</span>
+                    </h2>
+                    <p data-aos="fade-up" data-aos-delay="200">
+                        Download our complete menu to browse offline — includes detailed descriptions, prices, allergen info and chef's recommendations.
+                    </p>
+                    <div class="download-menu-buttons" data-aos="fade-up" data-aos-delay="300">
+                        <a href="404.html" class="btn btn-primary">
+                            <i class="fa-solid fa-download"></i> Download PDF
+                        </a>
+                        <a href="404.html" class="btn btn-ghost">
+                            <i class="fa-solid fa-print"></i> Print Menu
+                        </a>
+                    </div>
+                </div>
+
+                <div class="download-menu-visual" data-aos="fade-left" data-aos-duration="900">
+                    <div class="download-menu-card">
+                        <div class="download-menu-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3>Complete Menu</h3>
+                        <p>86 dishes · 8 categories · Updated weekly</p>
+                        <a href="404.html" class="btn btn-white">
+                            <i class="fa-solid fa-download"></i> Get PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER PLACEHOLDER ===== -->
+    <div id="footer-placeholder"></div>
+
+    <!-- ===== AOS JS ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 80, delay: 0 });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('header.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('header-placeholder').innerHTML = d; initHeader();
+            }).catch(() => {});
+            fetch('footer.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('footer-placeholder').innerHTML = d; initFooter();
+            }).catch(() => {});
+            initImageLoaded();
+        });
+
+        function initHeader() {
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const header = document.getElementById('mainHeader');
+            if (menuBtn && mobileMenu && mobileOverlay) {
+                menuBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    mobileMenu.classList.add('open'); mobileOverlay.classList.add('open');
+                    document.body.style.overflow = 'hidden'; });
+            }
+            if (closeBtn && mobileMenu && mobileOverlay) {
+                closeBtn.addEventListener('click', e => { e.preventDefault();
+                    mobileMenu.classList.remove('open'); mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto'; });
+            }
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', e => { e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    mobileOverlay.classList.remove('open'); document.body.style.overflow = 'auto'; });
+            }
+            if (header) window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
+        }
+
+        function initFooter() {
+            const footerHamburger = document.getElementById('mobileHamburger');
+            const footerNavMenu = document.getElementById('mobileNavMenu');
+            if (footerHamburger && footerNavMenu) {
+                const nh = footerHamburger.cloneNode(true);
+                footerHamburger.parentNode.replaceChild(nh, footerHamburger);
+                nh.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    footerNavMenu.classList.toggle('open'); });
+            }
+        }
+
+        function initImageLoaded() {
+            document.querySelectorAll('img').forEach(img => {
+                const markLoaded = () => {
+                    const parent = img.closest('.img-wrap');
+                    if (parent) parent.classList.add('img-loaded');
+                };
+                if (img.complete && img.naturalWidth > 0) markLoaded();
+                else img.addEventListener('load', markLoaded);
+            });
+        }
+
+        window.addEventListener('load', () => { document.body.style.overflowX = 'hidden'; });
+    </script>
+
+</body>
+</html>

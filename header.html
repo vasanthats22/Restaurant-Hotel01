@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant & Hotel - Navbar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #FDF9F3;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /*=============================================
+        HEADER / NAVBAR
+        =============================================*/
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            padding: 12px 0;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            padding-top: 110px;   /* slightly more since logo is bigger */
+        }
+
+        .header-container {
+            width: 98%;
+            max-width: 1520px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            height: 92px;         /* increased to fit bigger logo */
+            background: #FFFFFF;
+            border-radius: 60px;
+            box-shadow: 0 8px 30px rgba(107, 67, 33, 0.08);
+            transition: all 0.35s ease;
+            border: 1px solid rgba(180, 130, 80, 0.15);
+            overflow: hidden;
+            gap: 16px;
+        }
+
+        header.scrolled .header-container {
+            background: #FFFDF9;
+            box-shadow: 0 12px 36px rgba(107, 67, 33, 0.12);
+            height: 80px;
+            border-color: rgba(180, 130, 80, 0.25);
+        }
+
+        /*------------------------------------------------
+        LOGO — increased size
+        ------------------------------------------------*/
+        .logo {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            height: 62px;         /* increased from 48px */
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        header.scrolled .logo img {
+            height: 54px;         /* increased from 42px */
+        }
+
+        /*------------------------------------------------
+        DESKTOP NAV — 6 buttons
+        ------------------------------------------------*/
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex: 1;
+            justify-content: center;
+            margin: 0 12px;
+        }
+
+        .desktop-nav a {
+            font-size: 15px;
+            font-weight: 500;
+            color: #3E2C1B;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 6px 0;
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.25px;
+        }
+
+        .desktop-nav a i {
+            margin-right: 7px;
+            font-size: 14px;
+            color: #B47C4D;
+            transition: color 0.3s;
+        }
+
+        .desktop-nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2.5px;
+            background: #C48B5C;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .desktop-nav a:hover {
+            color: #8B5A2B;
+        }
+
+        .desktop-nav a:hover i {
+            color: #9E6B3E;
+        }
+
+        .desktop-nav a:hover::after,
+        .desktop-nav a.active::after {
+            width: 100%;
+        }
+
+        .desktop-nav a.active {
+            color: #7A4D28;
+            font-weight: 600;
+        }
+
+        .desktop-nav a.active i {
+            color: #B47C4D;
+        }
+
+        /*------------------------------------------------
+        RIGHT SIDE — Login (text) + Sign Up (solid CTA)
+        ------------------------------------------------*/
+        .right-side {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Login — text link */
+        .login-link {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3E2C1B;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 10px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .login-link i {
+            font-size: 14px;
+            color: #B47C4D;
+        }
+
+        .login-link:hover {
+            background: rgba(180, 124, 77, 0.08);
+            color: #7A4D28;
+        }
+
+        /* Sign Up — SOLID CTA (same style as old Book Now) */
+        .signup-btn {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 11px 26px;
+            border-radius: 40px;
+            cursor: pointer;
+            background: #B47C4D;
+            border: 2px solid #B47C4D;
+            box-shadow: 0 6px 18px rgba(180, 124, 77, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .signup-btn i {
+            font-size: 14px;
+        }
+
+        .signup-btn:hover {
+            background: #8B5A2B;
+            border-color: #8B5A2B;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(139, 90, 43, 0.45);
+        }
+
+        /*------------------------------------------------
+        MOBILE HAMBURGER
+        ------------------------------------------------*/
+        .menu-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(180, 124, 77, 0.12);
+            border-radius: 14px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: rgba(180, 124, 77, 0.25);
+        }
+
+        .menu-btn i {
+            color: #3E2C1B;
+            font-size: 20px;
+        }
+
+        /*------------------------------------------------
+        MOBILE MENU OVERLAY
+        ------------------------------------------------*/
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(50, 30, 10, 0.35);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.open {
+            display: block;
+            opacity: 1;
+        }
+
+        /*------------------------------------------------
+        MOBILE MENU
+        ------------------------------------------------*/
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 86%;
+            max-width: 380px;
+            height: 100vh;
+            background: #FDF9F3;
+            padding: 30px 22px;
+            transition: all 0.4s ease;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 40px rgba(80, 50, 20, 0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(180, 124, 77, 0.2);
+        }
+
+        /* Mobile logo — increased size */
+        .mobile-menu-header .mobile-logo img {
+            height: 54px;         /* increased from 40px */
+            display: block;
+            border-radius: 6px;
+        }
+
+        .close-btn {
+            font-size: 26px;
+            color: #3E2C1B;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #B47C4D;
+            transform: rotate(90deg);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .mobile-nav-links a {
+            font-size: 18px;
+            font-weight: 500;
+            color: #3E2C1B;
+            text-decoration: none;
+            padding: 13px 18px;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-nav-links a i {
+            color: #B47C4D;
+            width: 22px;
+            font-size: 18px;
+        }
+
+        .mobile-nav-links a:hover {
+            background: rgba(180, 124, 77, 0.08);
+            color: #7A4D28;
+            border-left-color: #B47C4D;
+        }
+
+        .mobile-nav-links a.active {
+            background: rgba(180, 124, 77, 0.14);
+            color: #7A4D28;
+            font-weight: 600;
+            border-left-color: #B47C4D;
+        }
+
+        .mobile-nav-links a.active i {
+            color: #8B5A2B;
+        }
+
+        .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(180, 124, 77, 0.15);
+        }
+
+        /* Mobile Login */
+        .mobile-actions .login-mobile {
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #3E2C1B;
+            text-decoration: none;
+            border-radius: 50px;
+            background: rgba(180, 124, 77, 0.06);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mobile-actions .login-mobile i {
+            color: #B47C4D;
+        }
+
+        .mobile-actions .login-mobile:hover {
+            background: rgba(180, 124, 77, 0.14);
+            border-color: rgba(180, 124, 77, 0.25);
+        }
+
+        /* Mobile Sign Up — SOLID CTA */
+        .mobile-actions .signup-mobile {
+            text-align: center;
+            padding: 13px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 50px;
+            background: #B47C4D;
+            border: 2px solid #B47C4D;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(180, 124, 77, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mobile-actions .signup-mobile i {
+            color: #FFFFFF;
+            font-size: 15px;
+        }
+
+        .mobile-actions .signup-mobile:hover {
+            background: #8B5A2B;
+            border-color: #8B5A2B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(139, 90, 43, 0.45);
+        }
+
+        /*=============================================
+        RESPONSIVE BREAKPOINTS
+        =============================================*/
+        @media(max-width: 1280px) {
+            .desktop-nav {
+                gap: 18px;
+            }
+            .desktop-nav a {
+                font-size: 14px;
+            }
+            .login-link {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            .signup-btn {
+                padding: 9px 20px;
+                font-size: 13px;
+            }
+            .logo img {
+                height: 56px;
+            }
+        }
+
+        @media(max-width: 1100px) {
+            .desktop-nav {
+                gap: 12px;
+                margin: 0 6px;
+            }
+            .desktop-nav a {
+                font-size: 12.5px;
+            }
+            .desktop-nav a i {
+                font-size: 12px;
+                margin-right: 5px;
+            }
+            .login-link {
+                padding: 7px 8px;
+                font-size: 12px;
+            }
+            .login-link i {
+                font-size: 12px;
+            }
+            .signup-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            .signup-btn i {
+                font-size: 12px;
+            }
+            .right-side {
+                gap: 6px;
+            }
+            .logo img {
+                height: 52px;
+            }
+        }
+
+        @media(max-width: 920px) {
+            .desktop-nav {
+                gap: 9px;
+            }
+            .desktop-nav a {
+                font-size: 11.5px;
+            }
+            .desktop-nav a i {
+                font-size: 11px;
+                margin-right: 3px;
+            }
+            .login-link {
+                padding: 6px 6px;
+                font-size: 11px;
+            }
+            .login-link i {
+                display: none;
+            }
+            .signup-btn {
+                padding: 7px 14px;
+                font-size: 11px;
+            }
+            .signup-btn i {
+                display: none;
+            }
+            .logo img {
+                height: 48px;
+            }
+        }
+
+        @media(max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .right-side {
+                display: none;
+            }
+            .menu-btn {
+                display: flex;
+            }
+            .header-container {
+                height: 80px;
+                padding: 0 20px;
+                border-radius: 50px;
+                width: 96%;
+            }
+            /* Mobile top navbar logo — bigger */
+            .logo img {
+                height: 54px;
+            }
+            body {
+                padding-top: 104px;
+            }
+        }
+
+        @media(max-width: 480px) {
+            header {
+                padding: 8px 0;
+            }
+            .header-container {
+                width: 100%;
+                border-radius: 0;
+                padding: 0 16px;
+                height: 72px;
+                background: #FFFFFF;
+                box-shadow: 0 2px 12px rgba(107, 67, 33, 0.06);
+                overflow: hidden;
+            }
+            /* Mobile small navbar logo — bigger */
+            .logo img {
+                height: 48px;
+            }
+            .menu-btn {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+            }
+            .menu-btn i {
+                font-size: 18px;
+            }
+            .mobile-menu {
+                width: 100%;
+                max-width: 100%;
+                padding: 24px 18px;
+            }
+            /* Mobile drawer logo — bigger */
+            .mobile-menu-header .mobile-logo img {
+                height: 48px;
+            }
+            .mobile-nav-links a {
+                font-size: 16px;
+                padding: 11px 14px;
+            }
+            .mobile-actions .login-mobile,
+            .mobile-actions .signup-mobile {
+                padding: 11px;
+                font-size: 14px;
+            }
+            body {
+                padding-top: 88px;
+            }
+        }
+
+        @media(max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+            .header-container {
+                overflow: hidden;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <header id="mainHeader">
+        <div class="header-container">
+
+            <!-- LOGO -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="stackly2l.webp" alt="Stackly — Restaurant & Hotel">
+                </a>
+            </div>
+
+            <!-- DESKTOP NAV -->
+            <nav class="desktop-nav">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="restaurant.html">
+                    <i class="fas fa-utensils"></i> Restaurant
+                </a>
+                <a href="menu.html">
+                    <i class="fas fa-book-open"></i> Menu
+                </a>
+                <a href="rooms.html">
+                    <i class="fas fa-bed"></i> Rooms
+                </a>
+                <a href="hotel.html">
+                    <i class="fas fa-hotel"></i> Hotel
+                </a>
+                <a href="contact.html">
+                    <i class="fas fa-concierge-bell"></i> Contact
+                </a>
+            </nav>
+
+            <!-- RIGHT SIDE — Login | Sign Up (solid CTA) -->
+            <div class="right-side">
+                <a href="login.html" class="login-link">
+                    <i class="fas fa-user"></i> Login
+                </a>
+                <a href="signup.html" class="signup-btn">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </div>
+
+            <!-- MOBILE HAMBURGER -->
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- ===== MOBILE MENU OVERLAY ===== -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="index.html" class="mobile-logo">
+                <img src="stackly2l.webp" alt="Stackly — Restaurant & Hotel">
+            </a>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="mobile-nav-links">
+            <a href="index.html">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="restaurant.html">
+                <i class="fas fa-utensils"></i> Restaurant
+            </a>
+            <a href="menu.html">
+                <i class="fas fa-book-open"></i> Menu
+            </a>
+            <a href="rooms.html">
+                <i class="fas fa-bed"></i> Rooms
+            </a>
+            <a href="hotel.html">
+                <i class="fas fa-hotel"></i> Hotel
+            </a>
+            <a href="contact.html">
+                <i class="fas fa-concierge-bell"></i> Contact
+            </a>
+        </div>
+
+        <div class="mobile-actions">
+            <a href="login.html" class="login-mobile">
+                <i class="fas fa-user"></i> Login
+            </a>
+            <a href="signup.html" class="signup-mobile">
+                <i class="fas fa-user-plus"></i> Sign Up
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const closeBtn = document.getElementById("closeBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const mobileOverlay = document.getElementById("mobileOverlay");
+        const mobileLinks = mobileMenu.querySelectorAll("a");
+        const header = document.getElementById("mainHeader");
+
+        function openMenu() {
+            mobileMenu.classList.add("open");
+            mobileOverlay.classList.add("open");
+            document.body.style.overflow = "hidden";
+        }
+
+        menuBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openMenu();
+        });
+
+        function closeMenu() {
+            mobileMenu.classList.remove("open");
+            mobileOverlay.classList.remove("open");
+            document.body.style.overflow = "auto";
+        }
+
+        closeBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            closeMenu();
+        });
+        mobileOverlay.addEventListener("click", function(e) {
+            e.preventDefault();
+            closeMenu();
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                const href = this.getAttribute("href");
+                closeMenu();
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 200);
+            });
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeMenu();
+        });
+
+        window.addEventListener("scroll", () => {
+            header.classList.toggle("scrolled", window.scrollY > 20);
+        });
+
+        const desktopLinks = document.querySelectorAll(".desktop-nav a");
+        const allMobileLinks = document.querySelectorAll(".mobile-nav-links a");
+
+        function setActiveLink(links, clickedLink) {
+            links.forEach(link => link.classList.remove("active"));
+            clickedLink.classList.add("active");
+        }
+
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+        desktopLinks.forEach(link => {
+            if (link.getAttribute("href") === currentPage) link.classList.add("active");
+        });
+        allMobileLinks.forEach(link => {
+            if (link.getAttribute("href") === currentPage) link.classList.add("active");
+        });
+
+        desktopLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                setActiveLink(desktopLinks, this);
+                window.location.href = this.getAttribute("href");
+            });
+        });
+
+        allMobileLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                setActiveLink(allMobileLinks, this);
+                closeMenu();
+                setTimeout(() => {
+                    window.location.href = this.getAttribute("href");
+                }, 200);
+            });
+        });
+
+        // Desktop right-side buttons
+        document.querySelector(".login-link").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.location.href = this.getAttribute("href");
+        });
+        document.querySelector(".signup-btn").addEventListener("click", function(e) {
+            e.preventDefault();
+            window.location.href = this.getAttribute("href");
+        });
+
+        // Mobile right-side buttons
+        document.querySelector(".login-mobile").addEventListener("click", function(e) {
+            e.preventDefault();
+            closeMenu();
+            setTimeout(() => window.location.href = this.getAttribute("href"), 200);
+        });
+        document.querySelector(".signup-mobile").addEventListener("click", function(e) {
+            e.preventDefault();
+            closeMenu();
+            setTimeout(() => window.location.href = this.getAttribute("href"), 200);
+        });
+
+        console.log("✅ Restaurant & Hotel header ready!");
+        console.log("🍽️ Nav: Home | Restaurant | Menu | Rooms | Hotel | Contact");
+        console.log("👤 Right: Login | Sign Up (solid terracotta CTA)");
+        console.log("🔍 Logo enlarged in all views");
+    </script>
+
+</body>
+</html>

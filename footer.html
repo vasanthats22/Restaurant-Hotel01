@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant & Hotel — Footer</title>
+
+    <!-- EXACT same font link as navbar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;   /* SAME as navbar */
+        }
+
+        body {
+            background: #FDF9F3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /*=============================================
+        FOOTER — Light Cream (matches navbar)
+        =============================================*/
+        footer {
+            background: #FDF9F3;
+            padding: 50px 0 32px;
+            margin-top: auto;
+            position: relative;
+            border-top: 1.5px solid rgba(180, 124, 77, 0.20);
+            box-shadow: 0 -4px 20px rgba(107, 67, 33, 0.04);
+        }
+
+        .footer-container {
+            max-width: 1520px;
+            width: 98%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* ROW 1 */
+        .footer-row-1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .footer-brand img {
+            height: 60px;
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .footer-brand:hover img {
+            opacity: 0.85;
+            transform: scale(1.03);
+        }
+
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a {
+            font-size: 15px;
+            font-weight: 600;
+            color: #3E2C1B;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 4px 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;   /* explicit */
+        }
+
+        .footer-nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2.5px;
+            background: #C48B5C;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .footer-nav a:hover {
+            color: #8B5A2B;
+        }
+
+        .footer-nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Divider */
+        .footer-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(180, 124, 77, 0.18);
+            border-radius: 2px;
+        }
+
+        /* ROW 2 */
+        .footer-row-2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-tagline {
+            font-size: 15px;
+            font-weight: 500;
+            color: #5C4A38;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+            max-width: 620px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-tagline .highlight {
+            color: #B47C4D;
+            font-weight: 700;
+        }
+
+        .footer-social {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(180, 124, 77, 0.10);
+            color: #B47C4D;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 17px;
+            border: 1px solid rgba(180, 124, 77, 0.22);
+        }
+
+        .footer-social a:hover {
+            background: #B47C4D;
+            color: #FFFFFF;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(180, 124, 77, 0.35);
+            border-color: #B47C4D;
+        }
+
+        /*=============================================
+        MOBILE VIEW
+        =============================================*/
+        .mobile-only {
+            display: none;
+        }
+
+        .mobile-nav-menu {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            padding: 14px 0;
+            width: 100%;
+        }
+
+        .mobile-nav-menu.open {
+            display: flex;
+        }
+
+        .mobile-nav-menu a {
+            font-size: 15px;
+            font-weight: 600;
+            color: #3E2C1B;
+            text-decoration: none;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(180, 124, 77, 0.15);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mobile-nav-menu a:hover {
+            color: #B47C4D;
+            padding-left: 8px;
+            border-bottom-color: #B47C4D;
+        }
+
+        @media(max-width: 768px) {
+            footer {
+                background: #FDF9F3;
+                padding: 28px 0 24px;
+                border-top: 1.5px solid rgba(180, 124, 77, 0.20);
+            }
+
+            .footer-container {
+                width: 94%;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .footer-row-1,
+            .footer-row-2,
+            .footer-divider {
+                display: none;
+            }
+
+            .mobile-only {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding-bottom: 14px;
+                border-bottom: 1px solid rgba(180, 124, 77, 0.18);
+            }
+
+            .mobile-header .mobile-logo img {
+                height: 58px;
+                display: block;
+                border-radius: 6px;
+            }
+
+            .mobile-hamburger {
+                background: rgba(180, 124, 77, 0.10);
+                border: 1px solid rgba(180, 124, 77, 0.22);
+                cursor: pointer;
+                padding: 10px 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                border-radius: 10px;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-hamburger:hover {
+                background: #B47C4D;
+                border-color: #B47C4D;
+            }
+
+            .mobile-hamburger span {
+                display: block;
+                width: 22px;
+                height: 2.5px;
+                background: #B47C4D;
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-hamburger span:nth-child(2) {
+                width: 16px;
+            }
+
+            .mobile-hamburger:hover span {
+                background: #FFFFFF;
+            }
+
+            .mobile-text {
+                font-size: 14px;
+                font-weight: 500;
+                color: #5C4A38;
+                line-height: 1.6;
+                text-align: left;
+                padding: 4px 0;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .mobile-text .highlight {
+                color: #B47C4D;
+                font-weight: 700;
+            }
+
+            .mobile-social-label {
+                font-size: 14px;
+                font-weight: 600;
+                color: #3E2C1B;
+                text-align: left;
+                margin-top: 4px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .mobile-social {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                justify-content: flex-start;
+                padding: 4px 0;
+                flex-wrap: wrap;
+            }
+
+            .mobile-social a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(180, 124, 77, 0.10);
+                color: #B47C4D;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                font-size: 17px;
+                border: 1px solid rgba(180, 124, 77, 0.22);
+            }
+
+            .mobile-social a:hover {
+                background: #B47C4D;
+                color: #FFFFFF;
+                transform: translateY(-3px);
+                box-shadow: 0 8px 24px rgba(180, 124, 77, 0.35);
+                border-color: #B47C4D;
+            }
+        }
+
+        @media(max-width: 480px) {
+            footer {
+                padding: 24px 0 20px;
+            }
+
+            .footer-container {
+                width: 94%;
+                gap: 12px;
+            }
+
+            .mobile-header .mobile-logo img {
+                height: 52px;
+            }
+
+            .mobile-hamburger {
+                padding: 8px 10px;
+            }
+
+            .mobile-hamburger span {
+                width: 18px;
+                height: 2px;
+            }
+
+            .mobile-hamburger span:nth-child(2) {
+                width: 12px;
+            }
+
+            .mobile-text {
+                font-size: 13px;
+            }
+
+            .mobile-social-label {
+                font-size: 13px;
+            }
+
+            .mobile-social {
+                gap: 12px;
+            }
+
+            .mobile-social a {
+                width: 42px;
+                height: 42px;
+                font-size: 16px;
+            }
+        }
+
+        @media(min-width: 769px) {
+            .mobile-only {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-container">
+
+            <!-- ===== DESKTOP VIEW ===== -->
+
+            <div class="footer-row-1">
+                <a href="index.html" class="footer-brand">
+                    <img src="stackly2l.webp" alt="Stackly — Restaurant & Hotel">
+                </a>
+                <nav class="footer-nav">
+                    <a href="index.html">Home</a>
+                    <a href="restaurant.html">Restaurant</a>
+                    <a href="menu.html">Menu</a>
+                    <a href="rooms.html">Rooms</a>
+                    <a href="hotel.html">Hotel</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-row-2">
+                <p class="footer-tagline">
+                    Where every stay feels like home. <span class="highlight">Dine. Rest. Repeat.</span>
+                </p>
+                <div class="footer-social">
+                    <a href="404.html" aria-label="Facebook" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="404.html" aria-label="Instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="404.html" aria-label="YouTube" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="404.html" aria-label="X (Twitter)" title="X (Twitter)">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a href="404.html" aria-label="LinkedIn" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ===== MOBILE VIEW ===== -->
+            <div class="mobile-only">
+                <div class="mobile-header">
+                    <a href="index.html" class="mobile-logo">
+                        <img src="stackly2l.webp" alt="Stackly — Restaurant & Hotel">
+                    </a>
+                    <button class="mobile-hamburger" id="mobileHamburger" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <div class="mobile-nav-menu" id="mobileNavMenu">
+                    <a href="index.html">Home</a>
+                    <a href="restaurant.html">Restaurant</a>
+                    <a href="menu.html">Menu</a>
+                    <a href="rooms.html">Rooms</a>
+                    <a href="hotel.html">Hotel</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+
+                <div class="mobile-text">
+                    Where every stay feels like home. <span class="highlight">Dine. Rest. Repeat.</span>
+                </div>
+
+                <div class="mobile-social-label">Follow us</div>
+
+                <div class="footer-divider" style="display:block; margin: 4px 0;"></div>
+
+                <div class="mobile-social">
+                    <a href="404.html" aria-label="Facebook" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="404.html" aria-label="Instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="404.html" aria-label="YouTube" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="404.html" aria-label="X (Twitter)" title="X (Twitter)">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a href="404.html" aria-label="LinkedIn" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        // ===== MOBILE HAMBURGER TOGGLE ONLY =====
+        const hamburger = document.getElementById('mobileHamburger');
+        const mobileNavMenu = document.getElementById('mobileNavMenu');
+
+        if (hamburger && mobileNavMenu) {
+            hamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mobileNavMenu.classList.toggle('open');
+            });
+        }
+
+        // Close mobile menu when a nav link is clicked (allows native navigation)
+        if (mobileNavMenu) {
+            mobileNavMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileNavMenu.classList.remove('open');
+                });
+            });
+        }
+
+        console.log("✅ Restaurant & Hotel footer ready!");
+        console.log("🔤 Font: Inter (identical to navbar)");
+        console.log("🔗 All links use native HTML navigation (no preventDefault)");
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant & Hotel — 404 Page Not Found</title>
+
+    <!-- AOS Animation CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* ===== FULL PAGE LAYOUT ===== */
+        body {
+            background: #FDF9F3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #header-placeholder {
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;   /* reduced top gap — header is fixed, so no need for huge top padding */
+        }
+
+        #footer-placeholder {
+            width: 100%;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        /* ===== ERROR CARD ===== */
+        .error-page {
+            max-width: 1100px;
+            width: 100%;
+            background: #FFFFFF;
+            padding: 3rem 3rem;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(107, 67, 33, 0.08);
+            border: 1px solid rgba(180, 124, 77, 0.12);
+        }
+
+        /* ===== LEFT COLUMN ===== */
+        .error-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .error-number {
+            font-size: 8rem;
+            font-weight: 800;
+            letter-spacing: -6px;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+            background: linear-gradient(135deg, #3E2C1B 0%, #B47C4D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-heading {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #3E2C1B;
+            margin-bottom: 0.8rem;
+        }
+
+        .error-heading i {
+            color: #B47C4D;
+            margin-right: 10px;
+            -webkit-text-fill-color: #B47C4D;
+        }
+
+        .error-description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            max-width: 420px;
+            color: #7A6B5A;
+            margin-bottom: 2rem;
+        }
+
+        .error-description strong {
+            color: #B47C4D;
+            font-weight: 600;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.85rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            font-family: inherit;
+            border: none;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: #B47C4D;
+            color: #FFFFFF;
+            box-shadow: 0 6px 18px rgba(180, 124, 77, 0.35);
+            border: 2px solid #B47C4D;
+        }
+
+        .btn-primary:hover {
+            background: #8B5A2B;
+            border-color: #8B5A2B;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 26px rgba(139, 90, 43, 0.45);
+        }
+
+        .btn-primary i {
+            color: #FFFFFF;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #7A4D28;
+            border: 2px solid #B47C4D;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(180, 124, 77, 0.08);
+            color: #7A4D28;
+            border-color: #9E6B3E;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(160, 100, 50, 0.15);
+        }
+
+        .btn-secondary:hover i {
+            color: #7A4D28;
+        }
+
+        .btn i {
+            font-size: 0.9rem;
+        }
+
+        /* ===== RIGHT COLUMN — ILLUSTRATION ===== */
+        .error-illustration {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .error-illustration img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            display: block;
+        }
+
+        .error-svg-fallback {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+        }
+
+        .error-svg-fallback svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* ============================================================ */
+        /*  RESPONSIVE — TABLET                                         */
+        /* ============================================================ */
+        @media (max-width: 992px) {
+            .error-number {
+                font-size: 6rem;
+            }
+
+            .error-heading {
+                font-size: 2rem;
+            }
+
+            .error-illustration img {
+                max-width: 380px;
+            }
+
+            .error-page {
+                padding: 2.5rem 2rem;
+                gap: 30px;
+            }
+        }
+
+        /* ============================================================ */
+        /*  RESPONSIVE — MOBILE                                         */
+        /* ============================================================ */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 30px 16px;
+            }
+
+            .error-page {
+                flex-direction: column-reverse;
+                padding: 2rem 1.5rem;
+                text-align: center;
+                gap: 25px;
+                border-radius: 18px;
+            }
+
+            .error-content {
+                align-items: center;
+            }
+
+            .error-description {
+                max-width: 340px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .button-row {
+                justify-content: center;
+            }
+
+            .error-number {
+                font-size: 5rem;
+                letter-spacing: -4px;
+            }
+
+            .error-heading {
+                font-size: 1.8rem;
+            }
+
+            .error-description {
+                font-size: 0.95rem;
+            }
+
+            .error-illustration {
+                min-height: 180px;
+                width: 100%;
+            }
+
+            .error-illustration img {
+                max-width: 320px;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+                padding: 0.7rem 1.6rem;
+                min-width: 130px;
+            }
+        }
+
+        /* ============================================================ */
+        /*  RESPONSIVE — SMALL MOBILE                                   */
+        /* ============================================================ */
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 12px;
+            }
+
+            .error-page {
+                padding: 1.5rem 1rem;
+                gap: 18px;
+                border-radius: 14px;
+            }
+
+            .error-number {
+                font-size: 4rem;
+                letter-spacing: -3px;
+            }
+
+            .error-heading {
+                font-size: 1.4rem;
+            }
+
+            .error-description {
+                font-size: 0.85rem;
+                max-width: 260px;
+                margin-bottom: 1.5rem;
+            }
+
+            .button-row {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.65rem 1.2rem;
+                min-width: 100%;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .error-illustration img {
+                max-width: 240px;
+            }
+
+            .error-illustration {
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER PLACEHOLDER ===== -->
+    <div id="header-placeholder"></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+        <div class="error-page" data-aos="zoom-in" data-aos-duration="800">
+
+            <!-- ===== LEFT COLUMN ===== -->
+            <div class="error-content">
+                <div class="error-number" data-aos="fade-right" data-aos-delay="200" data-aos-duration="700">404</div>
+                <h1 class="error-heading" data-aos="fade-right" data-aos-delay="350" data-aos-duration="700">
+                    <i class="fas fa-utensils"></i> Page Not Found
+                </h1>
+                <p class="error-description" data-aos="fade-right" data-aos-delay="500" data-aos-duration="700">
+                    The page you're looking for might have been moved, deleted, or never existed.
+                    Let's get you back to <strong>Restaurant & Hotel</strong> — where great food and comfortable stays await!
+                </p>
+                <div class="button-row" data-aos="fade-up" data-aos-delay="650" data-aos-duration="700">
+                    <a href="index.html" class="btn btn-primary" id="goHomeBtn">
+                        <i class="fas fa-home"></i> Homepage
+                    </a>
+                    <a href="#" class="btn btn-secondary" id="goBackBtn">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </a>
+                </div>
+            </div>
+
+            <!-- ===== RIGHT COLUMN ===== -->
+            <div class="error-illustration" data-aos="fade-left" data-aos-delay="300" data-aos-duration="900">
+                <img src="hotel1.webp" alt="404 illustration - page not found"
+                     onerror="this.style.display='none'; document.getElementById('svgFallback').style.display='block';" />
+
+                <div id="svgFallback" class="error-svg-fallback" style="display:none;">
+                    <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="300" rx="16" fill="#FDF9F3"/>
+
+                        <ellipse cx="200" cy="140" rx="90" ry="50" fill="#F5EDE3" stroke="#B47C4D" stroke-width="2"/>
+                        <ellipse cx="200" cy="140" rx="70" ry="38" fill="#FFFFFF" stroke="#C48B5C" stroke-width="1.5"/>
+
+                        <rect x="128" y="105" width="5" height="70" rx="2.5" fill="#B47C4D"/>
+                        <path d="M125 105 L130 105 L130 120 L125 120 Z" fill="#B47C4D"/>
+                        <rect x="267" y="105" width="5" height="70" rx="2.5" fill="#B47C4D"/>
+                        <ellipse cx="269.5" cy="100" rx="6" ry="8" fill="#B47C4D"/>
+
+                        <text x="200" y="155" text-anchor="middle" font-family="Inter, sans-serif" font-size="58" font-weight="800" fill="#3E2C1B">404</text>
+                        <text x="200" y="195" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#7A6B5A" letter-spacing="1">RESTAURANT &amp; HOTEL</text>
+
+                        <circle cx="60" cy="50" r="4" fill="#B47C4D" opacity="0.2"/>
+                        <circle cx="340" cy="50" r="4" fill="#B47C4D" opacity="0.2"/>
+                        <circle cx="60" cy="250" r="4" fill="#C48B5C" opacity="0.15"/>
+                        <circle cx="340" cy="250" r="4" fill="#C48B5C" opacity="0.15"/>
+
+                        <line x1="40" y1="90" x2="100" y2="90" stroke="#C48B5C" stroke-width="1.5" opacity="0.2"/>
+                        <line x1="300" y1="90" x2="360" y2="90" stroke="#C48B5C" stroke-width="1.5" opacity="0.2"/>
+                        <line x1="50" y1="210" x2="100" y2="210" stroke="#B47C4D" stroke-width="1.5" opacity="0.15"/>
+                        <line x1="300" y1="210" x2="350" y2="210" stroke="#B47C4D" stroke-width="1.5" opacity="0.15"/>
+
+                        <path d="M170 80 Q175 70 170 60" stroke="#C48B5C" stroke-width="2" fill="none" opacity="0.25" stroke-linecap="round"/>
+                        <path d="M200 75 Q205 65 200 55" stroke="#C48B5C" stroke-width="2" fill="none" opacity="0.25" stroke-linecap="round"/>
+                        <path d="M230 80 Q235 70 230 60" stroke="#C48B5C" stroke-width="2" fill="none" opacity="0.25" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== FOOTER PLACEHOLDER ===== -->
+    <div id="footer-placeholder"></div>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 60,
+            delay: 0
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('header.html')
+                .then(response => {
+                    if (!response.ok) throw new Error('Header not found');
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                    initHeader();
+                })
+                .catch(error => {
+                    console.error('Error loading header:', error);
+                    document.getElementById('header-placeholder').innerHTML =
+                        '<div style="background:#FDF9F3; color:#3E2C1B; padding:16px 20px; text-align:center; font-weight:500; border-bottom:1px solid rgba(180,124,77,0.15);">⚠️ Header failed to load</div>';
+                });
+
+            fetch('footer.html')
+                .then(response => {
+                    if (!response.ok) throw new Error('Footer not found');
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                    initFooter();
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                    document.getElementById('footer-placeholder').innerHTML =
+                        '<div style="background:#FDF9F3; color:#7A6B5A; padding:30px 20px; text-align:center; border-top:1px solid rgba(180,124,77,0.15);">⚠️ Footer failed to load</div>';
+                });
+        });
+
+        function initHeader() {
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+            const header = document.getElementById('mainHeader');
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (mobileMenu) mobileMenu.classList.add('open');
+                    if (mobileOverlay) mobileOverlay.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    if (mobileOverlay) mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    if (mobileOverlay) mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    if (mobileOverlay) mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 200);
+                });
+            });
+
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 20) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.desktop-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    document.querySelectorAll('.desktop-nav a').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    window.location.href = href;
+                });
+            });
+
+            const loginLink = document.querySelector('.login-link');
+            if (loginLink) {
+                loginLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            }
+
+            const signupBtn = document.querySelector('.signup-btn');
+            if (signupBtn) {
+                signupBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            }
+
+            const loginMobile = document.querySelector('.login-mobile');
+            if (loginMobile) {
+                loginMobile.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    if (mobileOverlay) mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                    setTimeout(() => {
+                        window.location.href = this.getAttribute('href');
+                    }, 200);
+                });
+            }
+
+            const signupMobile = document.querySelector('.signup-mobile');
+            if (signupMobile) {
+                signupMobile.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    if (mobileOverlay) mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                    setTimeout(() => {
+                        window.location.href = this.getAttribute('href');
+                    }, 200);
+                });
+            }
+
+            console.log('✅ Header initialized for 404 page');
+        }
+
+        function initFooter() {
+            const footerHamburger = document.getElementById('mobileHamburger');
+            const footerNavMenu = document.getElementById('mobileNavMenu');
+
+            if (footerHamburger && footerNavMenu) {
+                footerHamburger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    footerNavMenu.classList.toggle('open');
+                });
+            }
+
+            document.querySelectorAll('.footer-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    window.location.href = href;
+                });
+            });
+
+            document.querySelectorAll('.mobile-nav-menu a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    if (footerNavMenu) footerNavMenu.classList.remove('open');
+                    window.location.href = href;
+                });
+            });
+
+            document.querySelectorAll('.footer-social a, .mobile-social a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    window.location.href = href;
+                });
+            });
+
+            console.log('✅ Footer initialized for 404 page');
+        }
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileOverlay = document.getElementById('mobileOverlay');
+                if (mobileMenu) mobileMenu.classList.remove('open');
+                if (mobileOverlay) mobileOverlay.classList.remove('open');
+
+                const footerNavMenu = document.getElementById('mobileNavMenu');
+                if (footerNavMenu) footerNavMenu.classList.remove('open');
+
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        document.getElementById('goHomeBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+
+        document.getElementById('goBackBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.history.back();
+        });
+
+        console.log('✅ 404 page ready!');
+        console.log('🎨 Colors: #FDF9F3 · #B47C4D · #C48B5C · #3E2C1B');
+        console.log('✨ AOS animations active');
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Hotel Dashboard | Stackly</title>
+
+    <!-- ============================================================
+         AUTH GUARD — Only hotel managers can view this page.
+         ============================================================ -->
+    <script>
+      (function guardHotelDashboard() {
+        try {
+          const raw = sessionStorage.getItem('sh_session') || localStorage.getItem('sh_session');
+          const session = raw ? JSON.parse(raw) : null;
+          const now = Date.now();
+
+          const isValid =
+            session &&
+            session.authenticated === true &&
+            typeof session.expiresAt === 'number' &&
+            session.expiresAt > now &&
+            session.role === 'hotel';
+
+          if (!isValid) {
+            sessionStorage.removeItem('sh_session');
+            localStorage.removeItem('sh_session');
+            window.location.replace('login.html');
+            throw new Error('AUTH_REDIRECT');
+          }
+
+          window.__SH_USER__ = session;
+        } catch (err) {
+          if (err && err.message === 'AUTH_REDIRECT') return;
+          try {
+            sessionStorage.removeItem('sh_session');
+            localStorage.removeItem('sh_session');
+          } catch (_) {}
+          window.location.replace('login.html');
+        }
+      })();
+    </script>
+
+    <style>
+      html, body { visibility: hidden; }
+      body.sh-ready { visibility: visible; }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            espresso: '#3E2C1B',
+                            espressoDark: '#2A1D10',
+                            terracotta: '#B47C4D',
+                            terracottaHover: '#8B5A2B',
+                            gold: '#C48B5C',
+                            cream: '#FDF9F3'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #FDF9F3; }
+        ::-webkit-scrollbar-thumb { background: #B47C4D; border-radius: 10px; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDF9F3;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            border: 1px solid rgba(180, 124, 77, 0.12);
+            box-shadow: 0 4px 18px rgba(62, 44, 27, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all 0.3s ease;
+            overflow: visible;
+        }
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(180, 124, 77, 0.18);
+            transform: translateY(-2px);
+            border-color: rgba(180, 124, 77, 0.3);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(62, 44, 27, 0.05), 0 2px 4px -1px rgba(62, 44, 27, 0.03);
+        }
+
+        .chart-h-1 { height: 130px; width: 100%; }
+        .chart-h-2 { height: 120px; width: 100%; }
+        .chart-h-3 { height: 160px; width: 100%; }
+        .chart-h-4 { height: 200px; width: 100%; }
+
+        .sidebar {
+            height: 100vh;
+            max-height: 100vh;
+            margin: 0;
+            border: none;
+            border-right: 3px solid #B47C4D;
+            box-shadow: 4px 0 24px rgba(62, 44, 27, 0.15);
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #3E2C1B 0%, #2A1D10 100%);
+            border-radius: 0 !important;
+        }
+
+        .sidebar-logo-area {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(196, 139, 92, 0.18);
+            flex-shrink: 0;
+        }
+
+        .sidebar .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 8px 12px !important;
+            font-size: 0.8rem !important;
+            color: #F5EDE3;
+            border-left: 3px solid transparent;
+            border-radius: 0 12px 12px 0;
+        }
+        .sidebar .nav-link i {
+            color: #D9CBB8;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(196, 139, 92, 0.14);
+            color: #C48B5C;
+            border-left-color: #C48B5C;
+        }
+        .sidebar .nav-link:hover i { color: #C48B5C; }
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, #B47C4D, #C48B5C) !important;
+            color: #FFFFFF !important;
+            border-radius: 12px;
+            border-left-color: #B47C4D;
+            box-shadow: 0 4px 14px rgba(180, 124, 77, 0.4);
+        }
+        .sidebar .nav-link.active i { color: #FFFFFF !important; }
+        .sidebar hr { border-color: rgba(196, 139, 92, 0.2); }
+
+        .stat-card-mini .stat-content { gap: 1px; }
+        .stat-card-mini .stat-value { font-size: 1.2rem; }
+        .stat-card-mini .stat-label { font-size: 0.6rem; }
+
+        .nav-scroll { overflow-y: auto; flex: 1; }
+        .nav-scroll::-webkit-scrollbar { width: 3px; }
+        .nav-scroll::-webkit-scrollbar-thumb { background: #B47C4D; border-radius: 10px; }
+        .nav-scroll::-webkit-scrollbar-track { background: transparent; }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        .mobile-nav-bar {
+            display: none;
+            background: linear-gradient(180deg, #3E2C1B 0%, #2A1D10 100%);
+            border-bottom: 3px solid #B47C4D;
+            padding: 12px 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            gap: 8px;
+        }
+        .mobile-nav-bar::-webkit-scrollbar { display: none; }
+        .mobile-nav-bar .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #F5EDE3;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-family: inherit;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .mobile-nav-bar .nav-btn i { color: #C48B5C; font-size: 0.9rem; }
+        .mobile-nav-bar .nav-btn:hover {
+            background: rgba(196, 139, 92, 0.15);
+            color: #C48B5C;
+        }
+        .mobile-nav-bar .nav-btn.active {
+            background: linear-gradient(135deg, #B47C4D, #C48B5C);
+            color: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(180, 124, 77, 0.4);
+        }
+        .mobile-nav-bar .nav-btn.active i { color: #FFFFFF; }
+
+        .mobile-header-logo { display: none; }
+
+        .notification-dropdown {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid rgba(180, 124, 77, 0.2);
+            box-shadow: 0 20px 60px rgba(62, 44, 27, 0.25);
+            width: 380px;
+            z-index: 99999;
+            padding: 8px 0;
+            max-height: 460px;
+            overflow-y: auto;
+            border-top: 3px solid #B47C4D;
+        }
+        .notification-dropdown.show {
+            display: block;
+            animation: dropdownSlide 0.25s ease;
+        }
+        @keyframes dropdownSlide {
+            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .notification-dropdown .notif-header {
+            padding: 12px 20px 10px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #3E2C1B;
+            border-bottom: 1px solid rgba(180, 124, 77, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 16px 16px 0 0;
+            z-index: 2;
+        }
+        .notification-dropdown .notif-header .notif-badge {
+            background: #B47C4D;
+            color: #FFFFFF;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .notification-dropdown .notif-item {
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            border-bottom: 1px solid #EEF2F8;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notification-dropdown .notif-item:hover { background: #FDF9F3; }
+        .notification-dropdown .notif-item .notif-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+        .notification-dropdown .notif-item .notif-content { flex: 1; min-width: 0; }
+        .notification-dropdown .notif-item .notif-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #3E2C1B;
+        }
+        .notification-dropdown .notif-item .notif-desc {
+            font-size: 0.75rem;
+            color: #7A6B5A;
+            margin-top: 2px;
+            word-wrap: break-word;
+        }
+        .notification-dropdown .notif-item .notif-time {
+            font-size: 0.6rem;
+            color: #A08D78;
+            margin-top: 3px;
+        }
+        .notification-dropdown .notif-footer {
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #B47C4D;
+            font-weight: 700;
+            cursor: pointer;
+            border-top: 1px solid rgba(180, 124, 77, 0.15);
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-radius: 0 0 16px 16px;
+        }
+        .notification-dropdown .notif-footer:hover { background: #FDF9F3; color: #8B5A2B; }
+
+        @media (max-width: 1023px) {
+            .sidebar { display: none !important; }
+            body { padding: 0 !important; overflow-x: hidden !important; }
+            .ml-4 { margin-left: 0 !important; }
+            .mobile-nav-bar { display: flex !important; padding: 16px 20px !important; gap: 12px !important; }
+            .mobile-nav-bar .nav-btn { padding: 12px 24px !important; font-size: 0.9rem !important; gap: 12px !important; }
+            .mobile-nav-bar .nav-btn i { font-size: 1.1rem !important; }
+            .mobile-header-logo { display: block !important; }
+            .mobile-header-logo img { height: 58px !important; width: auto !important; object-fit: contain !important; }
+            .main-header { padding-left: 16px !important; padding-right: 16px !important; min-height: 78px !important; height: auto !important; flex-wrap: wrap !important; gap: 8px !important; }
+            .main-header .flex.items-center.gap-4 { flex-wrap: wrap !important; gap: 6px !important; }
+            .main-header #pageTitle { font-size: 0.95rem !important; }
+            .main-header #pageSubtitle { font-size: 0.65rem !important; }
+            .main-content-wrapper { height: 100vh !important; max-width: 100vw !important; overflow-x: hidden !important; }
+            .dashboard-body-scroll { overflow-x: hidden !important; max-width: 100% !important; padding: 16px !important; }
+            .card, .card-shadow { max-width: 100% !important; overflow: visible !important; }
+            .grid-cols-2.lg\:grid-cols-5 { grid-template-columns: repeat(2, 1fr) !important; }
+            .chart-h-1 { height: 180px; }
+            .chart-h-2 { height: 160px; }
+            .chart-h-3 { height: 180px; }
+            .chart-h-4 { height: 220px; }
+            .section-gap { margin-bottom: 24px !important; }
+            .card.p-4 { padding: 16px !important; }
+            .notification-dropdown { width: 360px !important; right: 20px !important; top: 68px !important; }
+        }
+
+        @media (max-width: 640px) {
+            .header-date-range { display: none !important; }
+            .header-user-text { display: none !important; }
+            .grid-cols-2.lg\:grid-cols-5 { grid-template-columns: 1fr !important; gap: 12px !important; }
+            .p-4.lg\:p-6 { padding: 12px !important; }
+            .gap-6 { gap: 10px !important; }
+            .mobile-nav-bar { padding: 14px 14px !important; gap: 10px !important; }
+            .mobile-nav-bar .nav-btn { padding: 10px 18px !important; font-size: 0.75rem !important; }
+            .dashboard-body-scroll { padding: 12px !important; }
+            .section-gap { margin-bottom: 16px !important; }
+            .mobile-header-logo img { height: 60px !important; }
+            .notification-dropdown { width: 320px !important; right: 12px !important; top: 64px !important; max-height: 380px !important; }
+            .content-section.active { display: block !important; width: 100% !important; }
+        }
+
+        .main-content-wrapper {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            max-width: 100vw;
+            overflow-x: hidden;
+            background: #FDF9F3;
+        }
+        .dashboard-body-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-width: 100%;
+            background: #FDF9F3;
+        }
+        .main-header { border-radius: 0 !important; }
+        .section-gap { margin-bottom: 28px; }
+        .sidebar .nav-link i { width: 20px; font-size: 0.85rem; }
+        .activity-item { display: flex; gap: 10px; padding: 6px 0; }
+        .dropdown-toggle { cursor: pointer; }
+        #adminDropdownMenu { display: none; }
+        #adminDropdownMenu.show { display: block; }
+
+        /* Room status pill colors */
+        .room-pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+        .room-available { background:rgba(34,197,94,0.12); color:#15803D; }
+        .room-occupied { background:rgba(220,38,38,0.1); color:#991B1B; }
+        .room-cleaning { background:rgba(245,158,11,0.14); color:#B45309; }
+        .room-maintenance { background:rgba(107,114,128,0.14); color:#374151; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-[#FDF9F3] p-0">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col overflow-hidden flex-shrink-0 z-20 sidebar">
+        <div class="sidebar-logo-area">
+            <a href="index.html" class="flex items-center">
+                <img src="stackly2l.webp" alt="Stackly" class="h-12 w-auto object-contain rounded-md">
+            </a>
+        </div>
+
+        <nav class="nav-scroll px-4 py-3 space-y-0.5 flex-1">
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link active mt-2" data-page="dashboard">
+                <i class="fa-solid fa-border-all w-5 text-sm"></i>
+                <span class="font-semibold text-sm">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="rooms">
+                <i class="fa-solid fa-bed w-5 text-sm"></i>
+                <span class="font-semibold">Rooms</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="bookings">
+                <i class="fa-solid fa-calendar-check w-5 text-sm"></i>
+                <span class="font-semibold">Bookings</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="checkin">
+                <i class="fa-solid fa-right-to-bracket w-5 text-sm"></i>
+                <span class="font-semibold">Check-In/Out</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="guests">
+                <i class="fa-solid fa-users w-5 text-sm"></i>
+                <span class="font-semibold">Guests</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="housekeeping">
+                <i class="fa-solid fa-broom w-5 text-sm"></i>
+                <span class="font-semibold">Housekeeping</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="services">
+                <i class="fa-solid fa-bell-concierge w-5 text-sm"></i>
+                <span class="font-semibold">Services</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="staff">
+                <i class="fa-solid fa-user-tie w-5 text-sm"></i>
+                <span class="font-semibold">Staff</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="reports">
+                <i class="fa-solid fa-chart-bar w-5 text-sm"></i>
+                <span class="font-semibold">Reports</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 nav-link" data-page="settings">
+                <i class="fa-solid fa-gear w-5 text-sm"></i>
+                <span class="font-semibold">Settings</span>
+            </a>
+
+            <div class="pt-2 pb-1.5"><hr></div>
+
+            <a href="login.html" class="flex items-center gap-3 px-4 py-2.5 text-red-300 hover:bg-red-500/10 hover:text-red-200 transition text-sm nav-link" onclick="handleLogout(event)">
+                <i class="fa-solid fa-right-from-bracket w-5 text-sm"></i>
+                <span class="font-semibold">Logout</span>
+            </a>
+            <div class="h-4"></div>
+        </nav>
+
+        <div class="px-4 pb-4 flex-shrink-0">
+            <div class="bg-[#2A1D10] rounded-2xl p-3 border border-[#C48B5C]/20 text-center relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-10 h-10 bg-[#C48B5C]/20 rounded-full opacity-60"></div>
+                <div class="w-7 h-7 bg-[#C48B5C]/20 rounded-full flex items-center justify-center text-[#C48B5C] mx-auto mb-1">
+                    <i class="fa-solid fa-hotel text-xs"></i>
+                </div>
+                <p class="text-[9px] font-bold text-white">Hotel Manager</p>
+                <p class="text-[8px] text-[#D9CBB8] mt-0.5 mb-1.5">Stackly Suites</p>
+                <div class="flex items-center justify-center gap-1.5 bg-[#3E2C1B] rounded-full px-2.5 py-1 border border-[#C48B5C]/30 shadow-sm w-max mx-auto">
+                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                    <span class="text-[8px] font-bold text-green-400">Front Desk Live</span>
+                </div>
+            </div>
+            <div class="text-center mt-2 text-[8px] text-[#D9CBB8]/70">© 2026 Stackly</div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-[#FDF9F3] ml-0 main-content-wrapper">
+
+        <header class="bg-white border-b border-gray-200 px-8 flex items-center justify-between h-[72px] flex-shrink-0 main-header">
+            <div class="flex items-center gap-4">
+                <div class="mobile-header-logo">
+                    <a href="index.html" class="flex items-center">
+                        <img src="stackly2l.webp" alt="Stackly" class="h-12 w-auto object-contain rounded-md">
+                    </a>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-[#3E2C1B] tracking-tight" id="pageTitle">Hotel Dashboard</h1>
+                    <p class="text-xs text-[#7A6B5A] leading-tight mt-0.5 font-medium" id="pageSubtitle">Manage your hotel operations.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 bg-[#FDF9F3] border border-gray-200 rounded-lg px-3 py-1.5 text-xs text-[#3E2C1B] cursor-pointer hover:bg-gray-50 transition desktop-date font-semibold" id="dateRangePicker">
+                    <i class="fa-regular fa-calendar text-[#B47C4D]"></i>
+                    <span class="font-medium" id="dateRangeText">Today, Jul 23 2026</span>
+                    <i class="fa-solid fa-chevron-down text-[9px] ml-1 text-[#7A6B5A]"></i>
+                </div>
+                <div class="relative cursor-pointer text-[#3E2C1B] hover:text-[#B47C4D] transition dropdown-toggle" id="notificationBell">
+                    <i class="fa-regular fa-bell text-base sm:text-lg"></i>
+                    <span class="absolute -top-1 -right-1 bg-[#B47C4D] text-white text-[8px] font-extrabold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">5</span>
+
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notif-header">
+                            <span>Notifications</span>
+                            <span class="notif-badge">5 new</span>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon bg-[#B47C4D]/15 text-[#B47C4D]"><i class="fa-solid fa-right-to-bracket"></i></div>
+                            <div class="notif-content">
+                                <div class="notif-title">New Check-In · Suite 305</div>
+                                <div class="notif-desc">Mr. &amp; Mrs. Sharma · 3 nights</div>
+                                <div class="notif-time">3 min ago</div>
+                            </div>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon bg-green-50 text-green-600"><i class="fa-solid fa-bed"></i></div>
+                            <div class="notif-content">
+                                <div class="notif-title">Room 214 Available</div>
+                                <div class="notif-desc">Housekeeping marked as ready</div>
+                                <div class="notif-time">15 min ago</div>
+                            </div>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon bg-amber-50 text-amber-600"><i class="fa-solid fa-broom"></i></div>
+                            <div class="notif-content">
+                                <div class="notif-title">Housekeeping Request</div>
+                                <div class="notif-desc">Room 402 needs fresh towels</div>
+                                <div class="notif-time">22 min ago</div>
+                            </div>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon bg-blue-50 text-blue-600"><i class="fa-solid fa-star"></i></div>
+                            <div class="notif-content">
+                                <div class="notif-title">New 5★ Review</div>
+                                <div class="notif-desc">"Amazing stay, friendly staff!"</div>
+                                <div class="notif-time">1 hour ago</div>
+                            </div>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon bg-purple-50 text-purple-600"><i class="fa-solid fa-concierge-bell"></i></div>
+                            <div class="notif-content">
+                                <div class="notif-title">Room Service · Suite 201</div>
+                                <div class="notif-desc">Breakfast order requested for 8 AM</div>
+                                <div class="notif-time">1.5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="notif-footer">View all notifications →</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 border-l pl-6 border-gray-200">
+                    <div class="text-right hidden sm:block header-user-text">
+                        <p class="text-xs font-extrabold text-[#3E2C1B] leading-tight" id="headerUserName">Manager</p>
+                        <p class="text-[9px] text-[#7A6B5A] font-bold leading-tight mt-0.5 uppercase">Hotel Manager</p>
+                    </div>
+                    <div class="w-8 h-8 bg-[#B47C4D] rounded-full flex items-center justify-center text-white font-extrabold text-[10px] cursor-pointer relative hover:bg-[#8B5A2B] transition dropdown-toggle" id="profileDropdown">
+                        <span id="avatarInitials">H</span>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-white rounded-full flex items-center justify-center border-2 border-[#B47C4D]">
+                            <i class="fa-solid fa-chevron-down text-[6px] text-[#B47C4D]"></i>
+                        </span>
+                        <div class="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg w-40 py-1 z-50" id="adminDropdownMenu">
+                            <a href="404.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-regular fa-user mr-2 text-[#B47C4D]"></i>Profile</a>
+                            <a href="404.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"><i class="fa-solid fa-gear mr-2 text-[#B47C4D]"></i>Settings</a>
+                            <hr class="my-1">
+                            <a href="login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50" onclick="handleLogout(event)"><i class="fa-solid fa-right-from-bracket mr-2"></i>Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== MOBILE NAV ===== -->
+        <div class="mobile-nav-bar">
+            <a href="#" class="nav-btn active" data-page="dashboard"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+            <a href="#" class="nav-btn" data-page="rooms"><i class="fa-solid fa-bed"></i> Rooms</a>
+            <a href="#" class="nav-btn" data-page="bookings"><i class="fa-solid fa-calendar-check"></i> Bookings</a>
+            <a href="#" class="nav-btn" data-page="checkin"><i class="fa-solid fa-right-to-bracket"></i> Check-In/Out</a>
+            <a href="#" class="nav-btn" data-page="guests"><i class="fa-solid fa-users"></i> Guests</a>
+            <a href="#" class="nav-btn" data-page="housekeeping"><i class="fa-solid fa-broom"></i> Housekeeping</a>
+            <a href="#" class="nav-btn" data-page="services"><i class="fa-solid fa-concierge-bell"></i> Services</a>
+            <a href="#" class="nav-btn" data-page="staff"><i class="fa-solid fa-user-tie"></i> Staff</a>
+            <a href="#" class="nav-btn" data-page="reports"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+            <a href="#" class="nav-btn" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="login.html" class="nav-btn" onclick="handleLogout(event)"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 lg:p-6 bg-[#FDF9F3] dashboard-body-scroll">
+
+            <!-- ===== DASHBOARD ===== -->
+            <div id="section-dashboard" class="content-section active">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-4 section-gap">
+                    <div class="card p-2.5 stat-card stat-card-mini">
+                        <div class="stat-content">
+                            <div class="flex items-center justify-between">
+                                <div class="w-6 h-6 bg-[#B47C4D]/15 rounded-lg flex items-center justify-center text-[#B47C4D]"><i class="fa-solid fa-bed text-[10px]"></i></div>
+                                <span class="text-[8px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-solid fa-arrow-up text-green-500 text-[6px]"></i> 6.4%</span>
+                            </div>
+                            <p class="text-[9px] text-[#7A6B5A] font-bold mt-0.5 uppercase tracking-wide">Rooms Occupied</p>
+                            <div class="flex items-baseline gap-1"><span class="text-base font-extrabold text-[#3E2C1B]">68/80</span><span class="text-[8px] text-gray-400 font-medium">85% occupancy</span></div>
+                        </div>
+                    </div>
+                    <div class="card p-2.5 stat-card stat-card-mini">
+                        <div class="stat-content">
+                            <div class="flex items-center justify-between">
+                                <div class="w-6 h-6 bg-green-50 rounded-lg flex items-center justify-center text-green-600"><i class="fa-solid fa-right-to-bracket text-[10px]"></i></div>
+                                <span class="text-[8px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-solid fa-arrow-up text-green-500 text-[6px]"></i> 4.2%</span>
+                            </div>
+                            <p class="text-[9px] text-[#7A6B5A] font-bold mt-0.5 uppercase tracking-wide">Today's Check-Ins</p>
+                            <div class="flex items-baseline gap-1"><span class="text-base font-extrabold text-[#3E2C1B]">22</span><span class="text-[8px] text-gray-400 font-medium">arrivals</span></div>
+                        </div>
+                    </div>
+                    <div class="card p-2.5 stat-card stat-card-mini">
+                        <div class="stat-content">
+                            <div class="flex items-center justify-between">
+                                <div class="w-6 h-6 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600"><i class="fa-solid fa-right-from-bracket text-[10px]"></i></div>
+                                <span class="text-[8px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-solid fa-arrow-down text-red-500 text-[6px]"></i> 1.8%</span>
+                            </div>
+                            <p class="text-[9px] text-[#7A6B5A] font-bold mt-0.5 uppercase tracking-wide">Today's Check-Outs</p>
+                            <div class="flex items-baseline gap-1"><span class="text-base font-extrabold text-[#3E2C1B]">18</span><span class="text-[8px] text-gray-400 font-medium">departures</span></div>
+                        </div>
+                    </div>
+                    <div class="card p-2.5 stat-card stat-card-mini">
+                        <div class="stat-content">
+                            <div class="flex items-center justify-between">
+                                <div class="w-6 h-6 bg-orange-50 rounded-lg flex items-center justify-center text-orange-500"><i class="fa-solid fa-dollar-sign text-[10px]"></i></div>
+                                <span class="text-[8px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-solid fa-arrow-up text-green-500 text-[6px]"></i> 9.7%</span>
+                            </div>
+                            <p class="text-[9px] text-[#7A6B5A] font-bold mt-0.5 uppercase tracking-wide">Today's Revenue</p>
+                            <div class="flex items-baseline gap-1"><span class="text-base font-extrabold text-[#3E2C1B]">$8,240</span><span class="text-[8px] text-gray-400 font-medium">vs yesterday</span></div>
+                        </div>
+                    </div>
+                    <div class="card p-2.5 stat-card stat-card-mini">
+                        <div class="stat-content">
+                            <div class="flex items-center justify-between">
+                                <div class="w-6 h-6 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600"><i class="fa-solid fa-star text-[10px]"></i></div>
+                                <span class="text-[8px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-solid fa-arrow-up text-green-500 text-[6px]"></i> 0.2</span>
+                            </div>
+                            <p class="text-[9px] text-[#7A6B5A] font-bold mt-0.5 uppercase tracking-wide">Avg Rating</p>
+                            <div class="flex items-baseline gap-1"><span class="text-base font-extrabold text-[#3E2C1B]">4.7★</span><span class="text-[8px] text-gray-400 font-medium">last 30 days</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4 section-gap">
+                    <div class="card p-4 card-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-[#3E2C1B] text-[13px]">📊 Weekly Occupancy</h3>
+                            <span class="text-[8px] text-[#7A6B5A] bg-[#F5EDE3] px-1.5 py-0.5 rounded-full font-bold uppercase">This Week</span>
+                        </div>
+                        <div class="chart-h-2"><canvas id="barChart"></canvas></div>
+                    </div>
+                    <div class="card p-4 card-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-[#3E2C1B] text-[13px]">📈 Revenue Trend</h3>
+                            <span class="text-[8px] text-[#7A6B5A] bg-[#F5EDE3] px-1.5 py-0.5 rounded-full font-bold uppercase">Last 7 Days</span>
+                        </div>
+                        <div class="chart-h-2"><canvas id="lineChart"></canvas></div>
+                    </div>
+                    <div class="card p-4 card-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-[#3E2C1B] text-[13px]">🎯 Booking Source</h3>
+                            <span class="text-[8px] text-[#7A6B5A] bg-[#F5EDE3] px-1.5 py-0.5 rounded-full font-bold uppercase">Distribution</span>
+                        </div>
+                        <div class="chart-h-2"><canvas id="pieChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- 3 Column Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-[35%_30%_35%] gap-3 lg:gap-4 section-gap">
+                    <div class="card p-4 card-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-[#3E2C1B] text-[13px]">🛏️ Room Status</h3>
+                            <a href="404.html" class="text-[10px] text-[#B47C4D] font-bold hover:underline uppercase">View All</a>
+                        </div>
+                        <div class="space-y-1 flex-1">
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-[#B47C4D] rounded-full flex items-center justify-center text-white text-[8px] font-extrabold">305</div>
+                                    <div>
+                                        <p class="text-[10px] font-extrabold text-[#3E2C1B]">Suite 305</p>
+                                        <p class="text-[8px] text-[#7A6B5A] font-semibold">Mr. &amp; Mrs. Sharma</p>
+                                    </div>
+                                </div>
+                                <span class="room-pill room-occupied">Occupied</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-[#B47C4D]/80 rounded-full flex items-center justify-center text-white text-[8px] font-extrabold">214</div>
+                                    <div>
+                                        <p class="text-[10px] font-extrabold text-[#3E2C1B]">Deluxe 214</p>
+                                        <p class="text-[8px] text-[#7A6B5A] font-semibold">Just cleaned · Ready</p>
+                                    </div>
+                                </div>
+                                <span class="room-pill room-available">Available</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-[#B47C4D]/60 rounded-full flex items-center justify-center text-white text-[8px] font-extrabold">402</div>
+                                    <div>
+                                        <p class="text-[10px] font-extrabold text-[#3E2C1B]">Standard 402</p>
+                                        <p class="text-[8px] text-[#7A6B5A] font-semibold">Housekeeping in progress</p>
+                                    </div>
+                                </div>
+                                <span class="room-pill room-cleaning">Cleaning</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-4 card-shadow">
+                        <h3 class="font-extrabold text-[#3E2C1B] text-[13px] mb-2">🏨 Hotel Status</h3>
+                        <div class="space-y-2 flex-1">
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <span class="text-[10px] text-[#5C4A38] font-semibold">Standard Rooms</span>
+                                <span class="room-pill room-available">32/40</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <span class="text-[10px] text-[#5C4A38] font-semibold">Deluxe Rooms</span>
+                                <span class="room-pill room-available">18/22</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <span class="text-[10px] text-[#5C4A38] font-semibold">Suites</span>
+                                <span class="room-pill room-cleaning">12/16</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                                <span class="text-[10px] text-[#5C4A38] font-semibold">Presidential</span>
+                                <span class="room-pill room-available">2/2</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] text-[#5C4A38] font-semibold">Front Desk</span>
+                                <span class="room-pill room-available">On Duty</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-4 card-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-[#3E2C1B] text-[13px]">🔄 Recent Activity</h3>
+                            <a href="404.html" class="text-[10px] text-[#B47C4D] font-bold hover:underline uppercase">View All</a>
+                        </div>
+                        <div class="space-y-1 flex-1">
+                            <div class="activity-item border-b border-gray-100 pb-2">
+                                <div class="w-6 h-6 bg-[#B47C4D]/15 rounded-full flex items-center justify-center text-[#B47C4D] flex-shrink-0 mt-0.5"><i class="fa-solid fa-right-to-bracket text-[8px]"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-extrabold text-[#3E2C1B]">New check-in <span class="font-medium text-[#7A6B5A] text-[8px]">3 min ago</span></p>
+                                    <p class="text-[8px] text-[#7A6B5A]">Suite 305 · Mr. &amp; Mrs. Sharma</p>
+                                </div>
+                            </div>
+                            <div class="activity-item border-b border-gray-100 pb-2">
+                                <div class="w-6 h-6 bg-[#B47C4D]/15 rounded-full flex items-center justify-center text-[#B47C4D] flex-shrink-0 mt-0.5"><i class="fa-solid fa-broom text-[8px]"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-extrabold text-[#3E2C1B]">Room cleaned <span class="font-medium text-[#7A6B5A] text-[8px]">15 min ago</span></p>
+                                    <p class="text-[8px] text-[#7A6B5A]">Deluxe 214 · ready for guest</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="w-6 h-6 bg-[#B47C4D]/15 rounded-full flex items-center justify-center text-[#B47C4D] flex-shrink-0 mt-0.5"><i class="fa-solid fa-star text-[8px]"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-extrabold text-[#3E2C1B]">New 5★ review <span class="font-medium text-[#7A6B5A] text-[8px]">1 hour ago</span></p>
+                                    <p class="text-[8px] text-[#7A6B5A]">"Fantastic stay" · Suite 201</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-3 lg:gap-4">
+                    <div class="card p-4 card-shadow">
+                        <h3 class="font-extrabold text-[#3E2C1B] text-[13px] mb-2">📊 Today's Summary</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <div class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100">
+                                <p class="text-[8px] text-[#7A6B5A] font-bold uppercase">Check-Ins</p>
+                                <p class="text-lg font-extrabold text-[#B47C4D]">22</p>
+                            </div>
+                            <div class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100">
+                                <p class="text-[8px] text-[#7A6B5A] font-bold uppercase">Check-Outs</p>
+                                <p class="text-lg font-extrabold text-[#B47C4D]">18</p>
+                            </div>
+                            <div class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100">
+                                <p class="text-[8px] text-[#7A6B5A] font-bold uppercase">Occupancy</p>
+                                <p class="text-lg font-extrabold text-[#B47C4D]">85%</p>
+                            </div>
+                            <div class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100">
+                                <p class="text-[8px] text-[#7A6B5A] font-bold uppercase">Revenue</p>
+                                <p class="text-lg font-extrabold text-[#B47C4D]">$8.2K</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-4 card-shadow">
+                        <h3 class="font-extrabold text-[#3E2C1B] text-[13px] mb-2">⚡ Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="404.html" class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100 hover:bg-[#B47C4D] hover:text-white transition group">
+                                <i class="fa-solid fa-key text-[#B47C4D] group-hover:text-white text-lg"></i>
+                                <p class="text-[10px] font-bold text-[#3E2C1B] group-hover:text-white mt-1 uppercase">New Booking</p>
+                            </a>
+                            <a href="404.html" class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100 hover:bg-[#B47C4D] hover:text-white transition group">
+                                <i class="fa-solid fa-right-to-bracket text-[#B47C4D] group-hover:text-white text-lg"></i>
+                                <p class="text-[10px] font-bold text-[#3E2C1B] group-hover:text-white mt-1 uppercase">Check-In</p>
+                            </a>
+                            <a href="404.html" class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100 hover:bg-[#B47C4D] hover:text-white transition group">
+                                <i class="fa-solid fa-broom text-[#B47C4D] group-hover:text-white text-lg"></i>
+                                <p class="text-[10px] font-bold text-[#3E2C1B] group-hover:text-white mt-1 uppercase">Clean Room</p>
+                            </a>
+                            <a href="404.html" class="bg-[#FDF9F3] p-3 rounded-xl text-center border border-gray-100 hover:bg-[#B47C4D] hover:text-white transition group">
+                                <i class="fa-solid fa-bullhorn text-[#B47C4D] group-hover:text-white text-lg"></i>
+                                <p class="text-[10px] font-bold text-[#3E2C1B] group-hover:text-white mt-1 uppercase">Announce</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== ROOMS ===== -->
+            <div id="section-rooms" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-bed text-[#B47C4D] mr-2"></i> Room Management</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Manage all hotel rooms, availability and status.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Total Rooms</p>
+                            <p class="text-2xl font-extrabold text-[#B47C4D]">80</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Available</p>
+                            <p class="text-2xl font-extrabold text-green-600">12</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Occupied</p>
+                            <p class="text-2xl font-extrabold text-red-600">68</p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Cleaning</p>
+                            <p class="text-2xl font-extrabold text-amber-600">6</p>
+                        </div>
+                    </div>
+                    <h3 class="text-sm font-extrabold text-[#3E2C1B] mb-2 uppercase">Room Types</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">🛏️</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Standard</p>
+                            <p class="text-sm text-[#7A6B5A]">32/40 occupied</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">🏨</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Deluxe</p>
+                            <p class="text-sm text-[#7A6B5A]">18/22 occupied</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">✨</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Suites</p>
+                            <p class="text-sm text-[#7A6B5A]">12/16 occupied</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">👑</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Presidential</p>
+                            <p class="text-sm text-[#7A6B5A]">2/2 occupied</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== BOOKINGS ===== -->
+            <div id="section-bookings" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-calendar-check text-[#B47C4D] mr-2"></i> Bookings</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">All current and upcoming room bookings.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-[#FDF9F3] text-[#7A6B5A] text-xs uppercase tracking-wide">
+                                <tr>
+                                    <th class="p-3 text-left">Booking ID</th>
+                                    <th class="p-3 text-left">Guest</th>
+                                    <th class="p-3 text-left">Room</th>
+                                    <th class="p-3 text-left">Dates</th>
+                                    <th class="p-3 text-left">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b"><td class="p-3 font-semibold text-[#3E2C1B]">#BK-2038</td><td class="p-3">Mr. &amp; Mrs. Sharma</td><td class="p-3">Suite 305</td><td class="p-3">Jul 23 – Jul 26</td><td class="p-3"><span class="room-pill room-occupied">Checked-In</span></td></tr>
+                                <tr class="border-b"><td class="p-3 font-semibold text-[#3E2C1B]">#BK-2037</td><td class="p-3">John Peterson</td><td class="p-3">Deluxe 214</td><td class="p-3">Jul 24 – Jul 27</td><td class="p-3"><span class="room-pill room-available">Confirmed</span></td></tr>
+                                <tr class="border-b"><td class="p-3 font-semibold text-[#3E2C1B]">#BK-2036</td><td class="p-3">Anna Lee</td><td class="p-3">Standard 402</td><td class="p-3">Jul 23 – Jul 24</td><td class="p-3"><span class="room-pill room-cleaning">Pending</span></td></tr>
+                                <tr><td class="p-3 font-semibold text-[#3E2C1B]">#BK-2035</td><td class="p-3">David Kim</td><td class="p-3">Presidential 501</td><td class="p-3">Jul 25 – Jul 30</td><td class="p-3"><span class="room-pill room-available">Confirmed</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== CHECK-IN / OUT ===== -->
+            <div id="section-checkin" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-right-to-bracket text-[#B47C4D] mr-2"></i> Check-In / Check-Out</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Today's arrivals and departures.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <h3 class="font-extrabold text-green-700 mb-2"><i class="fa-solid fa-right-to-bracket mr-1"></i> Check-Ins Today (22)</h3>
+                            <div class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Suite 305 · Sharma</span><span class="room-pill room-available">Arrived</span></div>
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Deluxe 214 · Peterson</span><span class="room-pill room-cleaning">Expected 3 PM</span></div>
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Standard 108 · Kumar</span><span class="room-pill room-cleaning">Expected 4 PM</span></div>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                            <h3 class="font-extrabold text-amber-700 mb-2"><i class="fa-solid fa-right-from-bracket mr-1"></i> Check-Outs Today (18)</h3>
+                            <div class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Standard 202 · Williams</span><span class="room-pill room-available">Checked-Out</span></div>
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Suite 401 · Rodriguez</span><span class="room-pill room-cleaning">Departing 11 AM</span></div>
+                                <div class="bg-white p-3 rounded-lg flex justify-between items-center"><span class="font-semibold text-[#3E2C1B]">Standard 306 · Chen</span><span class="room-pill room-cleaning">Departing 12 PM</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== GUESTS ===== -->
+            <div id="section-guests" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-users text-[#B47C4D] mr-2"></i> Guests</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Manage all hotel guests and their profiles.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Current Guests</p>
+                            <p class="text-2xl font-extrabold text-[#B47C4D]">142</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Returning Guests</p>
+                            <p class="text-2xl font-extrabold text-green-600">48</p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">New This Month</p>
+                            <p class="text-2xl font-extrabold text-amber-600">24</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== HOUSEKEEPING ===== -->
+            <div id="section-housekeeping" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-broom text-[#B47C4D] mr-2"></i> Housekeeping</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Manage room cleaning and maintenance tasks.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Clean Rooms</p>
+                            <p class="text-2xl font-extrabold text-green-600">62</p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Pending Cleaning</p>
+                            <p class="text-2xl font-extrabold text-amber-600">6</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Maintenance</p>
+                            <p class="text-2xl font-extrabold text-red-600">4</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Staff On Duty</p>
+                            <p class="text-2xl font-extrabold text-[#B47C4D]">8</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Room 402 · Full clean</span><span class="room-pill room-cleaning">In Progress</span></div>
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Room 214 · Fresh towels</span><span class="room-pill room-available">Done</span></div>
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Room 501 · AC repair</span><span class="room-pill room-maintenance">Maintenance</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SERVICES ===== -->
+            <div id="section-services" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-concierge-bell text-[#B47C4D] mr-2"></i> Guest Services</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Room service, spa and other hotel services.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">🍽️</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Room Service</p>
+                            <p class="text-sm text-[#7A6B5A]">6 pending orders</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">💆</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Spa &amp; Wellness</p>
+                            <p class="text-sm text-[#7A6B5A]">4 bookings today</p>
+                        </div>
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15 text-center">
+                            <p class="text-3xl mb-2">🚗</p>
+                            <p class="font-extrabold text-[#3E2C1B]">Airport Transfer</p>
+                            <p class="text-sm text-[#7A6B5A]">2 pickups scheduled</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STAFF ===== -->
+            <div id="section-staff" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-user-tie text-[#B47C4D] mr-2"></i> Staff Management</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Manage hotel staff and shifts.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-[#FDF9F3] p-4 rounded-xl border border-[#B47C4D]/15">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Total Staff</p>
+                            <p class="text-2xl font-extrabold text-[#B47C4D]">42</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">On Shift</p>
+                            <p class="text-2xl font-extrabold text-green-600">28</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                            <p class="text-sm text-[#5C4A38] font-semibold">Off Today</p>
+                            <p class="text-2xl font-extrabold text-red-600">14</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Sarah Chen</span><span class="text-sm text-[#7A6B5A]">Front Desk Manager · 8 AM – 4 PM</span><span class="room-pill room-available">On Shift</span></div>
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Michael Roy</span><span class="text-sm text-[#7A6B5A]">Concierge · 12 PM – 8 PM</span><span class="room-pill room-available">On Shift</span></div>
+                        <div class="bg-[#FDF9F3] p-3 rounded-xl border border-gray-100 flex justify-between items-center"><span class="font-bold text-[#3E2C1B]">Priya Patel</span><span class="text-sm text-[#7A6B5A]">Housekeeping Lead · 7 AM – 3 PM</span><span class="room-pill room-cleaning">Break</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== REPORTS ===== -->
+            <div id="section-reports" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-chart-bar text-[#B47C4D] mr-2"></i> Reports</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">View hotel analytics and reports.</p>
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <p class="text-sm text-[#5C4A38] font-bold">📊 Occupancy &amp; Revenue Reports Coming Soon</p>
+                        <p class="text-xs text-[#7A6B5A] mt-1">Detailed hotel reports will appear here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SETTINGS ===== -->
+            <div id="section-settings" class="content-section">
+                <div class="card p-6 card-shadow">
+                    <h2 class="text-xl font-extrabold text-[#3E2C1B] mb-4 uppercase"><i class="fa-solid fa-gear text-[#B47C4D] mr-2"></i> Settings</h2>
+                    <p class="text-[#5C4A38] mb-4 font-medium">Configure your hotel settings.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 hover:border-[#B47C4D] cursor-pointer transition">
+                            <i class="fa-solid fa-hotel text-[#B47C4D] text-xl mb-2"></i>
+                            <p class="font-bold text-[#3E2C1B]">Hotel Info</p>
+                            <p class="text-sm text-[#7A6B5A]">Name, logo, contact</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 hover:border-[#B47C4D] cursor-pointer transition">
+                            <i class="fa-solid fa-bed text-[#B47C4D] text-xl mb-2"></i>
+                            <p class="font-bold text-[#3E2C1B]">Room Settings</p>
+                            <p class="text-sm text-[#7A6B5A]">Types, pricing, amenities</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 hover:border-[#B47C4D] cursor-pointer transition">
+                            <i class="fa-solid fa-bell text-[#B47C4D] text-xl mb-2"></i>
+                            <p class="font-bold text-[#3E2C1B]">Notifications</p>
+                            <p class="text-sm text-[#7A6B5A]">Booking alerts, check-ins</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 hover:border-[#B47C4D] cursor-pointer transition">
+                            <i class="fa-solid fa-credit-card text-[#B47C4D] text-xl mb-2"></i>
+                            <p class="font-bold text-[#3E2C1B]">Payments</p>
+                            <p class="text-sm text-[#7A6B5A]">Payment gateways, invoices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-4"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const session = window.__SH_USER__;
+
+            if (session) {
+                const displayName = session.name || 'Manager';
+                const initial = displayName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+                const subtitle = document.getElementById('pageSubtitle');
+                if (subtitle) subtitle.textContent = "Welcome back, " + displayName.split(' ')[0] + ". Manage your hotel operations.";
+
+                const headerName = document.getElementById('headerUserName');
+                if (headerName) headerName.textContent = displayName;
+
+                const avatar = document.getElementById('avatarInitials');
+                if (avatar) avatar.textContent = initial;
+            }
+
+            const pageTitles = {
+                'dashboard': ['Hotel Dashboard', 'Manage your hotel operations.'],
+                'rooms': ['Rooms', 'Manage all hotel rooms, availability and status.'],
+                'bookings': ['Bookings', 'All current and upcoming room bookings.'],
+                'checkin': ['Check-In / Check-Out', "Today's arrivals and departures."],
+                'guests': ['Guests', 'Manage all hotel guests and their profiles.'],
+                'housekeeping': ['Housekeeping', 'Manage room cleaning and maintenance.'],
+                'services': ['Services', 'Room service, spa and other hotel services.'],
+                'staff': ['Staff', 'Manage hotel staff and shifts.'],
+                'reports': ['Reports', 'View hotel analytics and reports.'],
+                'settings': ['Settings', 'Configure your hotel settings.']
+            };
+
+            function navigateTo(page) {
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                const targetSection = document.getElementById('section-' + page);
+                if (targetSection) targetSection.classList.add('active');
+
+                if (pageTitles[page]) {
+                    document.getElementById('pageTitle').textContent = pageTitles[page][0];
+                    document.getElementById('pageSubtitle').textContent = pageTitles[page][1];
+                }
+
+                document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === page) link.classList.add('active');
+                });
+
+                document.querySelectorAll('.mobile-nav-bar .nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-page') === page) btn.classList.add('active');
+                });
+            }
+
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    if (page) navigateTo(page);
+                });
+            });
+
+            document.querySelectorAll('.mobile-nav-bar .nav-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const page = btn.getAttribute('data-page');
+                    if (page) { e.preventDefault(); navigateTo(page); }
+                });
+            });
+
+            const dateRangePicker = document.getElementById('dateRangePicker');
+            const dateRangeText = document.getElementById('dateRangeText');
+            if (dateRangePicker) {
+                dateRangePicker.addEventListener('click', function() {
+                    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    const today = new Date();
+                    const formatted = today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+                    dateRangeText.textContent = 'Today, ' + formatted;
+                });
+            }
+
+            const notificationBell = document.getElementById('notificationBell');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            if (notificationBell && notificationDropdown) {
+                notificationBell.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!notificationBell.contains(e.target)) notificationDropdown.classList.remove('show');
+                });
+            }
+
+            const profileDropdown = document.getElementById('profileDropdown');
+            const adminMenu = document.getElementById('adminDropdownMenu');
+            if (profileDropdown && adminMenu) {
+                profileDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    adminMenu.classList.toggle('show');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!profileDropdown.contains(e.target)) adminMenu.classList.remove('show');
+                });
+            }
+
+            navigateTo('dashboard');
+
+            document.body.classList.add('sh-ready');
+        });
+
+        function handleLogout(e) {
+            if (e) e.preventDefault();
+            sessionStorage.removeItem('sh_session');
+            localStorage.removeItem('sh_session');
+            window.location.replace('login.html');
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
+            const colors = {
+                terracotta: '#B47C4D',
+                terracottaLight: 'rgba(180, 124, 77, 0.15)',
+                gold: '#C48B5C',
+                green: '#1B8A3E',
+                blue: '#3B82F6',
+                purple: '#8B5CF6',
+                orange: '#F59E0B'
+            };
+
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    datasets: [{
+                        label: 'Occupancy %',
+                        data: [72, 78, 75, 82, 90, 96, 85],
+                        backgroundColor: colors.terracotta,
+                        borderRadius: 4,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    ...baseOpts,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#F5EDE3', drawBorder: false }, ticks: { font: { size: 8, family: 'Inter' } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 8, family: 'Inter' } } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [6200, 6800, 7100, 7400, 8600, 9800, 8240],
+                        borderColor: colors.terracotta,
+                        backgroundColor: colors.terracottaLight,
+                        tension: 0.4,
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        pointBackgroundColor: colors.terracotta,
+                        fill: true
+                    }]
+                },
+                options: {
+                    ...baseOpts,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#F5EDE3', drawBorder: false }, ticks: { font: { size: 8, family: 'Inter' } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 8, family: 'Inter' } } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('pieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Website','Booking.com','Phone','Walk-In','Partner'],
+                    datasets: [{
+                        data: [35, 25, 15, 15, 10],
+                        backgroundColor: [colors.terracotta, colors.gold, colors.orange, colors.blue, colors.purple],
+                        borderWidth: 2,
+                        borderColor: '#fff',
+                        hoverOffset: 5
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true, position: 'bottom',
+                            labels: { boxWidth: 10, padding: 6, font: { size: 8, family: 'Inter' } }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        });
+    </script>
+
+    <script>
+      window.addEventListener('pageshow', function (e) {
+        if (!e.persisted) return;
+        const raw = sessionStorage.getItem('sh_session') || localStorage.getItem('sh_session');
+        const session = raw ? JSON.parse(raw) : null;
+        const valid = session && session.authenticated === true &&
+                      session.expiresAt > Date.now() &&
+                      session.role === 'hotel';
+        if (!valid) window.location.replace('login.html');
+      });
+    </script>
+
+</body>
+</html>

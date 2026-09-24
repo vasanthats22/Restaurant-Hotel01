@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Restaurant & Hotel - Restaurant </title>
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { background: #FDF9F3; color: #3E2C1B; overflow-x: hidden; width: 100%; max-width: 100vw; padding-top: 100px; }
+        img, video { max-width: 100%; display: block; }
+        a { text-decoration: none; color: inherit; }
+        .section-wrapper { width: 100%; overflow-x: hidden; }
+
+        :root {
+            --cream: #FDF9F3;
+            --white: #FFFFFF;
+            --espresso: #3E2C1B;
+            --espresso-dark: #2A1D10;
+            --terracotta: #B47C4D;
+            --terracotta-dark: #8B5A2B;
+            --gold: #C48B5C;
+            --muted: #7A6B5A;
+            --border: rgba(180, 124, 77, 0.15);
+        }
+
+        .container { width: 92%; max-width: 1280px; margin: 0 auto; }
+        .section { padding: 80px 0; position: relative; }
+
+        .section-header { text-align: center; margin-bottom: 50px; max-width: 720px; margin-left: auto; margin-right: auto; }
+
+        .section-title { font-size: 2.4rem; font-weight: 800; color: var(--espresso); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 14px; }
+        .section-title span { color: var(--terracotta); }
+        .section-subtitle { font-size: 1rem; color: var(--muted); line-height: 1.7; font-weight: 500; }
+
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(180, 124, 77, 0.10); color: var(--terracotta-dark);
+            padding: 8px 18px; border-radius: 30px;
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.2px; margin-bottom: 18px; border: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 30px; border-radius: 50px;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 0.4px;
+            cursor: pointer; transition: all 0.35s ease;
+            border: 2px solid transparent; white-space: nowrap; font-family: inherit;
+        }
+        .btn-primary { background: var(--terracotta); color: #FFFFFF; box-shadow: 0 8px 24px rgba(180, 124, 77, 0.35); }
+        .btn-primary:hover { background: var(--terracotta-dark); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(139, 90, 43, 0.5); }
+        .btn-outline { background: transparent; color: var(--terracotta-dark); border: 2px solid var(--terracotta); }
+        .btn-outline:hover { background: rgba(180, 124, 77, 0.08); transform: translateY(-3px); }
+        .btn-white { background: #FFFFFF; color: var(--espresso); }
+        .btn-white:hover { background: var(--cream); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+        .btn-ghost { background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border: 2px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.25); border-color: #FFFFFF; transform: translateY(-3px); }
+
+        .section-cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 44px; }
+
+        .img-wrap {
+            position: relative;
+            background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%);
+            overflow: hidden;
+        }
+        .img-wrap::before {
+            content: '\f03e'; font-family: 'Font Awesome 6 Free'; font-weight: 400;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 3rem; color: rgba(180, 124, 77, 0.35);
+            pointer-events: none; z-index: 0;
+        }
+        .img-wrap img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .img-wrap.img-loaded::before { display: none; }
+
+        /* ========== SECTION 1 — HERO BANNER ========== */
+        .hero-banner { position: relative; padding: 70px 0 100px; background: linear-gradient(135deg, #FDF9F3 0%, #F5EDE3 100%); overflow: hidden; }
+        .hero-banner::before { content: ''; position: absolute; top: -150px; right: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(180, 124, 77, 0.12), transparent 70%); border-radius: 50%; }
+        .hero-banner::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(196, 139, 92, 0.10), transparent 70%); border-radius: 50%; }
+        .hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+        .hero-split-content { max-width: 560px; }
+        .hero-split-title { font-size: 3.4rem; font-weight: 900; line-height: 1.05; letter-spacing: -2px; color: var(--espresso); margin-bottom: 22px; }
+        .hero-split-title span { color: var(--terracotta); }
+        .hero-split-desc { font-size: 1.05rem; color: var(--muted); line-height: 1.75; margin-bottom: 32px; font-weight: 400; }
+        .hero-split-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+        .hero-split-visual { position: relative; height: 560px; }
+        .hero-split-img-main { position: absolute; top: 0; right: 0; width: 78%; height: 78%; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(62, 44, 27, 0.22); background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%); }
+        .hero-split-img-main img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-split-img-secondary { position: absolute; bottom: 0; left: 0; width: 55%; height: 55%; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(62, 44, 27, 0.25); border: 8px solid var(--cream); background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%); }
+        .hero-split-img-secondary img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ========== SECTION 2 — AWARD STRIP ========== */
+        .award-strip { background: var(--espresso); color: #FFFFFF; padding: 28px 0; overflow: hidden; position: relative; border-top: 3px solid var(--terracotta); border-bottom: 3px solid var(--terracotta); }
+        .award-strip-track { display: flex; gap: 60px; animation: scrollLeft 30s linear infinite; white-space: nowrap; width: max-content; }
+        @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .award-strip-item { display: inline-flex; align-items: center; gap: 12px; font-size: 1rem; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 1.5px; flex-shrink: 0; }
+        .award-strip-item i { color: var(--gold); font-size: 1.2rem; }
+        .award-strip-item span { color: var(--gold); }
+
+        /* ========== SECTION 3 — MENU CATEGORIES ========== */
+        .menu-cats { background: var(--white); padding: 70px 0; }
+        .menu-cats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+        .menu-cat { text-align: center; cursor: pointer; transition: all 0.35s ease; }
+        .menu-cat:hover { transform: translateY(-6px); }
+        .menu-cat-circle { width: 100%; aspect-ratio: 1/1; max-width: 120px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(135deg, #FDF9F3, #F5EDE3); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--terracotta); transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .menu-cat:hover .menu-cat-circle { background: linear-gradient(135deg, var(--terracotta), var(--gold)); color: #FFFFFF; border-color: var(--terracotta); box-shadow: 0 15px 40px rgba(180, 124, 77, 0.35); }
+        .menu-cat-label { font-size: 0.85rem; font-weight: 700; color: var(--espresso); text-transform: uppercase; letter-spacing: 0.8px; }
+
+        /* ========== SECTION 4 — HERO DISH SHOWCASE ========== */
+        .hero-dish { background: linear-gradient(135deg, #FDF9F3 0%, #F5EDE3 100%); padding: 80px 0; }
+        .hero-dish-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 60px; align-items: center; }
+        .hero-dish-visual { position: relative; height: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(62, 44, 27, 0.2); background: #2A1D10; }
+        .hero-dish-visual video { width: 100%; height: 100%; object-fit: cover; }
+        .hero-dish-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); border: 2px solid #FFFFFF; color: #FFFFFF; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.35s ease; z-index: 5; }
+        .hero-dish-play:hover { background: #FFFFFF; color: var(--terracotta); transform: translate(-50%, -50%) scale(1.1); }
+        .hero-dish-content { max-width: 540px; }
+        .hero-dish-title { font-size: 2.4rem; font-weight: 800; line-height: 1.15; color: var(--espresso); margin-bottom: 16px; letter-spacing: -0.5px; }
+        .hero-dish-title span { color: var(--terracotta); }
+        .hero-dish-desc { font-size: 0.98rem; color: var(--muted); line-height: 1.75; margin-bottom: 26px; }
+        .hero-dish-features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
+        .hero-dish-feat { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--white); border-radius: 14px; border: 1px solid var(--border); }
+        .hero-dish-feat i { width: 36px; height: 36px; background: rgba(180, 124, 77, 0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--terracotta); font-size: 0.9rem; flex-shrink: 0; }
+        .hero-dish-feat-text strong { font-size: 0.85rem; font-weight: 800; color: var(--espresso); display: block; }
+        .hero-dish-feat-text span { font-size: 0.72rem; color: var(--muted); }
+
+        /* ========== SECTION 5 — BENTO MENU ========== */
+        .bento-menu { background: var(--white); padding: 80px 0; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 220px 220px; gap: 18px; }
+        .bento-card { position: relative; border-radius: 20px; overflow: hidden; transition: all 0.4s ease; background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%); cursor: pointer; }
+        .bento-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .bento-card:hover img { transform: scale(1.08); }
+        .bento-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(42, 29, 16, 0.9) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; color: #FFFFFF; }
+        .bento-card-overlay .price { position: absolute; top: 18px; right: 18px; background: var(--terracotta); padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 0.8rem; box-shadow: 0 6px 18px rgba(180, 124, 77, 0.4); }
+        .bento-card-overlay h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
+        .bento-card-overlay p { font-size: 0.78rem; color: rgba(255, 255, 255, 0.75); }
+        .bento-card.b-wide { grid-column: span 2; }
+        .bento-card.b-tall { grid-row: span 2; }
+
+        /* ========== SECTION 6 — CHEF'S SIGNATURE ========== */
+        .chef-signature { background: var(--espresso); color: #FFFFFF; padding: 100px 0; position: relative; overflow: hidden; }
+        .chef-signature::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(180, 124, 77, 0.15), transparent 70%); border-radius: 50%; }
+        .chef-sig-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+        .chef-sig-visual { position: relative; height: 520px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, #3E2C1B, #2A1D10); }
+        .chef-sig-visual img { width: 100%; height: 100%; object-fit: cover; }
+        .chef-sig-badge { position: absolute; bottom: 24px; left: 24px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); padding: 16px 22px; border-radius: 16px; display: flex; align-items: center; gap: 14px; border-left: 4px solid var(--terracotta); }
+        .chef-sig-badge-icon { width: 44px; height: 44px; background: rgba(180, 124, 77, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--terracotta); font-size: 1.2rem; }
+        .chef-sig-badge-text strong { display: block; font-size: 0.95rem; font-weight: 800; color: var(--espresso); }
+        .chef-sig-badge-text span { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+        .chef-sig-content .section-title { color: #FFFFFF; }
+        .chef-sig-content .section-title span { color: var(--gold); }
+        .chef-sig-content .section-subtitle { color: rgba(255, 255, 255, 0.7); }
+        .chef-sig-content .section-tag { background: rgba(196, 139, 92, 0.2); color: var(--gold); border-color: rgba(196, 139, 92, 0.35); }
+        .chef-sig-quote { font-size: 1.1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.85); font-style: italic; margin-bottom: 26px; padding-left: 20px; border-left: 3px solid var(--gold); }
+        .chef-sig-author { display: flex; align-items: center; gap: 14px; margin-bottom: 30px; }
+        .chef-sig-avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid var(--gold); position: relative; background: rgba(196, 139, 92, 0.2); }
+        .chef-sig-avatar::before { content: '\f007'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(196, 139, 92, 0.6); z-index: 0; }
+        .chef-sig-avatar img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .chef-sig-author-text strong { display: block; font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+        .chef-sig-author-text span { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
+
+        /* ========== SECTION 7 — DINING ROOMS ========== */
+        .dining-rooms { background: linear-gradient(180deg, #FDF9F3 0%, #F5EDE3 100%); padding: 80px 0; }
+        .dining-rooms-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+        .dining-room { position: relative; height: 480px; border-radius: 22px; overflow: hidden; background: linear-gradient(135deg, #F5EDE3, #E8DCCC); transition: all 0.5s ease; cursor: pointer; }
+        .dining-room img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .dining-room:hover img { transform: scale(1.1); }
+        .dining-room-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(42, 29, 16, 0.95) 0%, rgba(42, 29, 16, 0.2) 60%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; color: #FFFFFF; }
+        .dining-room-number { position: absolute; top: 20px; right: 20px; font-size: 3rem; font-weight: 900; color: rgba(255, 255, 255, 0.15); line-height: 1; letter-spacing: -3px; }
+        .dining-room-overlay h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+        .dining-room-overlay p { font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); line-height: 1.55; margin-bottom: 16px; }
+        .dining-room-btn { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.18); border: 1.5px solid rgba(255, 255, 255, 0.5); padding: 10px 18px; border-radius: 30px; font-size: 0.78rem; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.5px; backdrop-filter: blur(6px); transition: all 0.3s ease; width: fit-content; }
+        .dining-room:hover .dining-room-btn { background: var(--terracotta); border-color: var(--terracotta); }
+
+        /* ========== SECTION 8 — TASTING HIGHLIGHTS ========== */
+        .tasting-highlights { background: var(--white); padding: 80px 0; }
+        .tasting-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .tasting-card { background: linear-gradient(135deg, #FDF9F3, #F5EDE3); border-radius: 20px; padding: 32px 24px; text-align: center; border: 1px solid var(--border); transition: all 0.35s ease; position: relative; overflow: hidden; }
+        .tasting-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--terracotta), var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+        .tasting-card:hover::after { transform: scaleX(1); }
+        .tasting-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(180, 124, 77, 0.18); }
+        .tasting-icon { width: 60px; height: 60px; background: rgba(180, 124, 77, 0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--terracotta); font-size: 1.4rem; margin: 0 auto 18px; }
+        .tasting-number { font-size: 2.4rem; font-weight: 900; color: var(--terracotta); line-height: 1; letter-spacing: -1px; margin-bottom: 6px; }
+        .tasting-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ========== SECTION 9 — RESERVATION STRIP ========== */
+        .reservation-strip { background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-dark) 100%); color: #FFFFFF; padding: 70px 0; position: relative; overflow: hidden; }
+        .reservation-strip::before { content: '\f2e7'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -50px; right: -50px; font-size: 15rem; color: rgba(255, 255, 255, 0.08); z-index: 0; }
+        .reservation-strip-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+        .reservation-strip h2 { font-size: 2.4rem; font-weight: 900; line-height: 1.15; letter-spacing: -1px; margin-bottom: 14px; }
+        .reservation-strip h2 span { background: linear-gradient(135deg, #FFD9A8, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .reservation-strip p { font-size: 1rem; color: rgba(255, 255, 255, 0.9); line-height: 1.7; margin-bottom: 26px; }
+        .reservation-strip-info { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 26px; }
+        .reservation-info-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 600; }
+        .reservation-info-item i { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.18); border-radius: 10px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); flex-shrink: 0; }
+        .reservation-strip-form { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 20px; padding: 28px; }
+        .reservation-strip-form h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .res-field { margin-bottom: 4px; }
+        .res-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.12); color: #FFFFFF; font-size: 0.85rem; font-family: inherit; outline: none; transition: all 0.3s ease; }
+        .res-input::placeholder { color: rgba(255, 255, 255, 0.65); }
+        .res-input:focus { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.2); }
+        .res-input.error { border-color: #FFCDD2; background: rgba(220, 38, 38, 0.25); }
+        .res-input.valid { border-color: #A7F3D0; background: rgba(16, 185, 129, 0.15); }
+        .res-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .res-error { display: none; color: #FFE4E6; font-size: 0.72rem; font-weight: 600; margin: 4px 0 10px 4px; line-height: 1.4; text-align: left; }
+        .res-error.show { display: block; }
+        .res-error i { margin-right: 4px; }
+
+        .res-submit-btn { width: 100%; margin-top: 8px; background: #FFFFFF; color: var(--terracotta-dark); padding: 13px 24px; border-radius: 50px; border: none; font-weight: 800; font-size: 0.88rem; cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.3s ease; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .res-submit-btn:hover { background: #FDF9F3; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.15); }
+        .res-submit-btn:disabled { opacity: 0.7; cursor: wait; transform: none; }
+
+        .res-global-msg { display: none; padding: 10px 14px; border-radius: 10px; font-size: 0.78rem; font-weight: 700; line-height: 1.5; margin-bottom: 14px; text-align: left; }
+        .res-global-msg.show { display: block; }
+        .res-global-msg.success { background: #ECFDF5; color: #065F46; border-left: 4px solid #10B981; }
+        .res-global-msg.error { background: #FEF2F2; color: #991B1B; border-left: 4px solid #DC2626; }
+        .res-global-msg i { margin-right: 6px; }
+
+        /* ========== SECTION 10 — FINAL CTA ========== */
+        .final-cta { background: var(--espresso); color: #FFFFFF; padding: 100px 0; text-align: center; position: relative; overflow: hidden; }
+        .final-cta::before { content: ''; position: absolute; top: -150px; left: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(180, 124, 77, 0.2), transparent 70%); border-radius: 50%; }
+        .final-cta::after { content: ''; position: absolute; bottom: -200px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(196, 139, 92, 0.15), transparent 70%); border-radius: 50%; }
+        .final-cta-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+        .final-cta-icon { width: 80px; height: 80px; background: rgba(180, 124, 77, 0.15); border: 1.5px solid rgba(180, 124, 77, 0.4); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--gold); margin: 0 auto 26px; backdrop-filter: blur(6px); }
+        .final-cta h2 { font-size: 3rem; font-weight: 900; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+        .final-cta h2 span { background: linear-gradient(135deg, #C48B5C, #FFD9A8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .final-cta p { font-size: 1.05rem; color: rgba(255, 255, 255, 0.8); line-height: 1.75; margin-bottom: 40px; }
+        .final-cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+        /* ============================================================
+           RESPONSIVE — TABLET (1024px)
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .hero-split { grid-template-columns: 1fr; gap: 40px; }
+            .hero-split-visual { height: 460px; max-width: 520px; margin: 0 auto; width: 100%; }
+            .hero-split-title { font-size: 2.6rem; }
+            .menu-cats-grid { grid-template-columns: repeat(3, 1fr); }
+            .hero-dish-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero-dish-visual { height: 400px; }
+            .hero-dish-content { max-width: 100%; }
+            .bento-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 220px); }
+            .chef-sig-grid { grid-template-columns: 1fr; gap: 40px; }
+            .chef-sig-visual { height: 460px; }
+            .dining-rooms-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+            .dining-rooms-grid .dining-room:last-child { grid-column: span 2; height: 380px; }
+            .tasting-grid { grid-template-columns: 1fr 1fr; }
+            .reservation-strip-inner { grid-template-columns: 1fr; gap: 30px; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — MOBILE (768px)
+           ============================================================ */
+        @media (max-width: 768px) {
+            body { padding-top: 90px; }
+
+            .section { padding: 60px 0; }
+            .section-title { font-size: 1.7rem; }
+            .section-subtitle { font-size: 0.9rem; }
+            .section-header { margin-bottom: 36px; }
+            .section-cta { margin-top: 32px; }
+
+            .container { width: 94%; }
+
+            /* Hero */
+            .hero-banner { padding: 40px 0 70px; }
+            .hero-split { gap: 34px; }
+            .hero-split-content { max-width: 100%; }
+            .hero-split-title { font-size: 2rem; letter-spacing: -1px; }
+            .hero-split-desc { font-size: 0.95rem; }
+            .hero-split-buttons { gap: 12px; flex-direction: column; align-items: stretch; }
+            .hero-split-buttons .btn { padding: 12px 24px; font-size: 0.85rem; width: 100%; }
+
+            /* Stack hero images vertically */
+            .hero-split-visual {
+                height: auto;
+                max-width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                position: relative;
+            }
+            .hero-split-img-main,
+            .hero-split-img-secondary {
+                position: relative;
+                top: auto; right: auto; bottom: auto; left: auto;
+                width: 100%;
+                height: 220px;
+                border-radius: 18px;
+                border: none;
+            }
+            .hero-split-img-secondary { border: none; }
+
+            /* Award strip */
+            .award-strip { padding: 22px 0; }
+            .award-strip-track { gap: 40px; }
+            .award-strip-item { font-size: 0.8rem; gap: 8px; letter-spacing: 1px; }
+            .award-strip-item i { font-size: 0.95rem; }
+
+            /* Menu categories */
+            .menu-cats { padding: 50px 0; }
+            .menu-cats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+            .menu-cat-circle { font-size: 1.6rem; margin-bottom: 10px; max-width: 90px; }
+            .menu-cat-label { font-size: 0.72rem; }
+
+            /* Hero dish */
+            .hero-dish { padding: 60px 0; }
+            .hero-dish-grid { gap: 30px; }
+            .hero-dish-visual { height: 320px; width: 100%; }
+            .hero-dish-play { width: 60px; height: 60px; font-size: 1.15rem; }
+            .hero-dish-content { max-width: 100%; }
+            .hero-dish-title { font-size: 1.7rem; }
+            .hero-dish-desc { font-size: 0.9rem; }
+            .hero-dish-features { grid-template-columns: 1fr; gap: 12px; }
+            .hero-dish-feat { padding: 12px; }
+            .hero-dish-feat i { width: 32px; height: 32px; font-size: 0.8rem; }
+            .hero-dish-feat-text strong { font-size: 0.8rem; }
+            .hero-dish-feat-text span { font-size: 0.7rem; }
+            .hero-dish-content .btn { width: 100%; }
+
+            /* Bento */
+            .bento-menu { padding: 60px 0; }
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(5, 220px);
+                gap: 14px;
+            }
+            .bento-card.b-wide { grid-column: span 1; }
+            .bento-card.b-tall { grid-row: span 1; }
+            .bento-card-overlay h3 { font-size: 1.05rem; }
+            .bento-card-overlay p { font-size: 0.72rem; }
+
+            /* Chef signature */
+            .chef-signature { padding: 60px 0; }
+            .chef-sig-grid { gap: 30px; }
+            .chef-sig-visual { height: 340px; width: 100%; }
+            .chef-sig-quote { font-size: 0.95rem; padding-left: 14px; }
+            .chef-sig-badge { bottom: 16px; left: 16px; right: 16px; padding: 12px 16px; }
+            .chef-sig-badge-icon { width: 36px; height: 36px; font-size: 1rem; }
+            .chef-sig-badge-text strong { font-size: 0.85rem; }
+            .chef-sig-badge-text span { font-size: 0.68rem; }
+            .chef-sig-author-text strong { font-size: 0.9rem; }
+            .chef-sig-content .btn { width: 100%; }
+
+            /* Dining rooms */
+            .dining-rooms { padding: 60px 0; }
+            .dining-rooms-grid { grid-template-columns: 1fr; gap: 18px; }
+            .dining-rooms-grid .dining-room:last-child { grid-column: span 1; height: 380px; }
+            .dining-room { height: 380px; }
+            .dining-room-number { font-size: 2rem; top: 16px; right: 16px; }
+            .dining-room-overlay { padding: 22px; }
+            .dining-room-overlay h3 { font-size: 1.15rem; }
+            .dining-room-overlay p { font-size: 0.8rem; }
+
+            /* Tasting */
+            .tasting-highlights { padding: 60px 0; }
+            .tasting-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+            .tasting-card { padding: 24px 16px; }
+            .tasting-icon { width: 50px; height: 50px; font-size: 1.15rem; margin-bottom: 14px; }
+            .tasting-number { font-size: 1.8rem; }
+            .tasting-label { font-size: 0.7rem; }
+
+            /* Reservation */
+            .reservation-strip { padding: 50px 0; }
+            .reservation-strip h2 { font-size: 1.7rem; }
+            .reservation-strip p { font-size: 0.9rem; }
+            .reservation-strip-form { padding: 22px; }
+            .res-row { grid-template-columns: 1fr; gap: 0; }
+            .reservation-strip::before { font-size: 8rem; top: -20px; right: -20px; }
+            .reservation-info-item { width: 100%; }
+
+            /* Final CTA */
+            .final-cta { padding: 70px 0; }
+            .final-cta h2 { font-size: 1.9rem; letter-spacing: -1px; }
+            .final-cta p { font-size: 0.92rem; }
+            .final-cta-icon { width: 66px; height: 66px; font-size: 1.6rem; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — SMALL MOBILE (480px)
+           ============================================================ */
+        @media (max-width: 480px) {
+            body { padding-top: 80px; }
+            .section { padding: 50px 0; }
+            .section-title { font-size: 1.45rem; }
+            .section-subtitle { font-size: 0.85rem; }
+            .section-tag { font-size: 0.68rem; padding: 6px 14px; }
+
+            /* Hero */
+            .hero-split-title { font-size: 1.65rem; }
+            .hero-split-desc { font-size: 0.88rem; }
+            .hero-split-img-main,
+            .hero-split-img-secondary { height: 180px; border-radius: 14px; }
+
+            /* Menu categories */
+            .menu-cats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+            .menu-cat-circle { max-width: 80px; font-size: 1.4rem; }
+            .menu-cat-label { font-size: 0.68rem; }
+
+            /* Hero dish */
+            .hero-dish-visual { height: 260px; }
+            .hero-dish-title { font-size: 1.45rem; }
+
+            /* Bento */
+            .bento-grid { grid-template-rows: repeat(5, 200px); }
+            .bento-card-overlay h3 { font-size: 1rem; }
+
+            /* Chef */
+            .chef-sig-visual { height: 280px; }
+            .chef-sig-badge { position: static; margin-top: 14px; border-left: 4px solid var(--terracotta); }
+            .chef-sig-badge-text strong { font-size: 0.8rem; }
+            .chef-sig-quote { font-size: 0.88rem; }
+
+            /* Dining */
+            .dining-room { height: 340px; }
+
+            /* Tasting */
+            .tasting-grid { grid-template-columns: 1fr; }
+
+            /* Final CTA */
+            .final-cta h2 { font-size: 1.55rem; }
+            .final-cta-buttons { flex-direction: column; align-items: stretch; }
+            .final-cta-buttons .btn { width: 100%; }
+
+            /* Reservation */
+            .reservation-strip h2 { font-size: 1.5rem; }
+            .reservation-strip-form { padding: 18px; }
+            .res-input { padding: 11px 14px; font-size: 0.82rem; }
+            .res-submit-btn { padding: 12px 20px; font-size: 0.82rem; }
+        }
+
+        /* ============================================================
+           GUARANTEE — NO HORIZONTAL SCROLL
+           ============================================================ */
+        @media (max-width: 1024px) {
+            html, body { overflow-x: hidden !important; max-width: 100vw; }
+            .section-wrapper, .container, section { max-width: 100vw; }
+            img, video, iframe { max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER PLACEHOLDER ===== -->
+    <div id="header-placeholder"></div>
+
+    <!-- ============================================================
+         SECTION 1 — HERO BANNER
+         ============================================================ -->
+    <section class="hero-banner section-wrapper">
+        <div class="container">
+            <div class="hero-split">
+                <div class="hero-split-content" data-aos="fade-right" data-aos-duration="900">
+                    <div class="section-tag"><i class="fa-solid fa-utensils"></i> Welcome to Our Restaurant</div>
+                    <h1 class="hero-split-title" data-aos="fade-up" data-aos-delay="100">
+                        A Taste of <span>Excellence</span><br />Crafted Daily
+                    </h1>
+                    <p class="hero-split-desc" data-aos="fade-up" data-aos-delay="200">
+                        Discover our signature dishes made with the freshest ingredients, curated by award-winning chefs in an elegant, welcoming atmosphere.
+                    </p>
+                    <div class="hero-split-buttons" data-aos="fade-up" data-aos-delay="300">
+                        <a href="404.html" class="btn btn-primary">
+                            <i class="fa-solid fa-calendar-check"></i> Reserve a Table
+                        </a>
+                        <a href="404.html" class="btn btn-outline">
+                            <i class="fa-solid fa-book-open"></i> Explore Menu
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-split-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="hero-split-img-main img-wrap">
+                        <img src="dish1.webp" alt="Signature dish"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="hero-split-img-secondary img-wrap">
+                        <img src="dish2.webp" alt="Chef plating"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format&fit=crop';" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2 — AWARD STRIP
+         ============================================================ -->
+    <section class="award-strip section-wrapper">
+        <div class="award-strip-track">
+            <div class="award-strip-item"><i class="fa-solid fa-trophy"></i> Best Restaurant <span>2025</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-star"></i> Michelin Recommended <span>2024</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-medal"></i> Top 10 Fine Dining <span>2024</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-award"></i> Chef of the Year <span>2023</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-leaf"></i> Green Kitchen Certified <span>2023</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-trophy"></i> Best Restaurant <span>2025</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-star"></i> Michelin Recommended <span>2024</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-medal"></i> Top 10 Fine Dining <span>2024</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-award"></i> Chef of the Year <span>2023</span></div>
+            <div class="award-strip-item"><i class="fa-solid fa-leaf"></i> Green Kitchen Certified <span>2023</span></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — MENU CATEGORIES
+         ============================================================ -->
+    <section class="menu-cats section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-list"></i> Explore Our Menu</div>
+                <h2 class="section-title">Browse by <span>Category</span></h2>
+                <p class="section-subtitle">From appetisers to desserts — every dish is a work of culinary art.</p>
+            </div>
+
+            <div class="menu-cats-grid">
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="100">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-plate-wheat"></i></div>
+                    <div class="menu-cat-label">Starters</div>
+                </a>
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="200">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-drumstick-bite"></i></div>
+                    <div class="menu-cat-label">Mains</div>
+                </a>
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="300">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-pizza-slice"></i></div>
+                    <div class="menu-cat-label">Pizza</div>
+                </a>
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="400">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-ice-cream"></i></div>
+                    <div class="menu-cat-label">Desserts</div>
+                </a>
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="500">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-wine-glass"></i></div>
+                    <div class="menu-cat-label">Wines</div>
+                </a>
+                <a href="404.html" class="menu-cat" data-aos="fade-up" data-aos-delay="600">
+                    <div class="menu-cat-circle"><i class="fa-solid fa-mug-hot"></i></div>
+                    <div class="menu-cat-label">Beverages</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4 — HERO DISH SHOWCASE
+         ============================================================ -->
+    <section class="hero-dish section-wrapper">
+        <div class="container">
+            <div class="hero-dish-grid">
+                <div class="hero-dish-visual" data-aos="fade-right" data-aos-duration="1000">
+                    <video id="dishVideo" autoplay muted loop playsinline poster="images/dish-poster.webp">
+                        <source src="hotelv1.mp4" type="video/mp4" />
+                    </video>
+                    <button class="hero-dish-play" id="dishPlayBtn" aria-label="Toggle video">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+                </div>
+
+                <div class="hero-dish-content" data-aos="fade-left" data-aos-duration="900">
+                    <div class="section-tag"><i class="fa-solid fa-fire"></i> Chef's Signature</div>
+                    <h2 class="hero-dish-title">Where <span>Flavour</span> Meets Artistry</h2>
+                    <p class="hero-dish-desc">
+                        Watch our chefs bring each dish to life — from the sizzle of the pan to the final elegant plating, every moment is crafted with passion.
+                    </p>
+
+                    <div class="hero-dish-features">
+                        <div class="hero-dish-feat">
+                            <i class="fa-solid fa-leaf"></i>
+                            <div class="hero-dish-feat-text">
+                                <strong>Fresh Ingredients</strong>
+                                <span>Locally sourced daily</span>
+                            </div>
+                        </div>
+                        <div class="hero-dish-feat">
+                            <i class="fa-solid fa-hat-cowboy"></i>
+                            <div class="hero-dish-feat-text">
+                                <strong>Expert Chefs</strong>
+                                <span>Michelin-trained</span>
+                            </div>
+                        </div>
+                        <div class="hero-dish-feat">
+                            <i class="fa-solid fa-clock"></i>
+                            <div class="hero-dish-feat-text">
+                                <strong>Fast Service</strong>
+                                <span>Within 15 minutes</span>
+                            </div>
+                        </div>
+                        <div class="hero-dish-feat">
+                            <i class="fa-solid fa-award"></i>
+                            <div class="hero-dish-feat-text">
+                                <strong>Award Winning</strong>
+                                <span>Top 10 restaurants</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="404.html" class="btn btn-primary">
+                        <i class="fa-solid fa-utensils"></i> Order Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5 — BENTO MENU GRID
+         ============================================================ -->
+    <section class="bento-menu section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-star"></i> Bestsellers</div>
+                <h2 class="section-title">Our Most <span>Loved Dishes</span></h2>
+                <p class="section-subtitle">Handpicked favourites from our guests — ready to delight your taste buds.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card b-tall" data-aos="fade-up" data-aos-delay="100">
+                    <img src="dish3.webp" alt="Grilled Steak"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop';" />
+                    <div class="bento-card-overlay">
+                        <div class="price">$42</div>
+                        <h3>Filet Mignon</h3>
+                        <p>Premium beef · truffle mash · red wine sauce</p>
+                    </div>
+                </div>
+
+                <div class="bento-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="dish4.webp" alt="Salmon"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop';" />
+                    <div class="bento-card-overlay">
+                        <div class="price">$28</div>
+                        <h3>Atlantic Salmon</h3>
+                        <p>Lemon butter · seasonal greens</p>
+                    </div>
+                </div>
+
+                <div class="bento-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="dish5.webp" alt="Pasta"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=600&auto=format&fit=crop';" />
+                    <div class="bento-card-overlay">
+                        <div class="price">$32</div>
+                        <h3>Truffle Pasta</h3>
+                        <p>Black truffle · parmesan</p>
+                    </div>
+                </div>
+
+                <div class="bento-card b-wide" data-aos="fade-up" data-aos-delay="400">
+                    <img src="dish6.webp" alt="Signature"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1000&auto=format&fit=crop';" />
+                    <div class="bento-card-overlay">
+                        <div class="price">$56</div>
+                        <h3>Chef's Tasting Plate</h3>
+                        <p>A curated selection of our finest dishes — perfect for sharing</p>
+                    </div>
+                </div>
+
+                <div class="bento-card" data-aos="fade-up" data-aos-delay="500">
+                    <img src="dish7.webp" alt="Dessert"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format&fit=crop';" />
+                    <div class="bento-card-overlay">
+                        <div class="price">$14</div>
+                        <h3>Chocolate Fondant</h3>
+                        <p>Warm · molten centre</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-outline">
+                    <i class="fa-solid fa-book-open"></i> View Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6 — CHEF'S SIGNATURE
+         ============================================================ -->
+    <section class="chef-signature section-wrapper">
+        <div class="container">
+            <div class="chef-sig-grid">
+                <div class="chef-sig-visual img-wrap" data-aos="fade-right" data-aos-duration="1000">
+                    <img src="dish8.webp" alt="Chef at work"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&auto=format&fit=crop';" />
+                    <div class="chef-sig-badge">
+                        <div class="chef-sig-badge-icon"><i class="fa-solid fa-hat-cowboy"></i></div>
+                        <div class="chef-sig-badge-text">
+                            <strong>Chef Marco Rossi</strong>
+                            <span>Head Chef · 15 Years</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chef-sig-content" data-aos="fade-left" data-aos-duration="900">
+                    <div class="section-tag"><i class="fa-solid fa-quote-left"></i> Chef's Philosophy</div>
+                    <h2 class="section-title">Cooking is <span>Storytelling</span></h2>
+                    <p class="section-subtitle">
+                        Every dish on our menu has a story — from the farm it began on to the plate it lands on.
+                    </p>
+                    <div class="chef-sig-quote">
+                        "I believe food is more than fuel — it's memory, emotion, and art. Every plate we serve carries a piece of our journey."
+                    </div>
+                    <div class="chef-sig-author">
+                        <div class="chef-sig-avatar">
+                            <img src="dish9.webp" alt="Chef Marco"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583394838336-acd977736f90?w=200&auto=format&fit=crop';" />
+                        </div>
+                        <div class="chef-sig-author-text">
+                            <strong>Chef Marco Rossi</strong>
+                            <span>Head Chef · Italian Cuisine</span>
+                        </div>
+                    </div>
+                    <a href="404.html" class="btn btn-white">
+                        <i class="fa-solid fa-book-open"></i> Read His Story
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 7 — DINING ROOMS
+         ============================================================ -->
+    <section class="dining-rooms section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-chair"></i> Choose Your Space</div>
+                <h2 class="section-title">Our Dining <span>Rooms</span></h2>
+                <p class="section-subtitle">From intimate corners to grand halls — find the perfect setting for your occasion.</p>
+            </div>
+
+            <div class="dining-rooms-grid">
+                <div class="dining-room" data-aos="fade-up" data-aos-delay="100">
+                    <img src="restaurant1.webp" alt="Main Hall"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop';" />
+                    <div class="dining-room-overlay">
+                        <div class="dining-room-number">01</div>
+                        <h3>The Main Hall</h3>
+                        <p>Grand open space with warm lighting and a lively atmosphere.</p>
+                        <a href="404.html" class="dining-room-btn">
+                            <i class="fa-solid fa-arrow-right"></i> Explore
+                        </a>
+                    </div>
+                </div>
+
+                <div class="dining-room" data-aos="fade-up" data-aos-delay="200">
+                    <img src="restaurant2.webp" alt="Private Room"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&auto=format&fit=crop';" />
+                    <div class="dining-room-overlay">
+                        <div class="dining-room-number">02</div>
+                        <h3>Private Dining</h3>
+                        <p>Intimate settings for celebrations and special evenings.</p>
+                        <a href="404.html" class="dining-room-btn">
+                            <i class="fa-solid fa-arrow-right"></i> Explore
+                        </a>
+                    </div>
+                </div>
+
+                <div class="dining-room" data-aos="fade-up" data-aos-delay="300">
+                    <img src="restaurant3.webp" alt="Terrace"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&auto=format&fit=crop';" />
+                    <div class="dining-room-overlay">
+                        <div class="dining-room-number">03</div>
+                        <h3>Rooftop Terrace</h3>
+                        <p>Open-air dining with skyline views and sunset ambiance.</p>
+                        <a href="404.html" class="dining-room-btn">
+                            <i class="fa-solid fa-arrow-right"></i> Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-primary">
+                    <i class="fa-solid fa-calendar-check"></i> Book Your Table
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 8 — TASTING HIGHLIGHTS
+         ============================================================ -->
+    <section class="tasting-highlights section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-chart-line"></i> At a Glance</div>
+                <h2 class="section-title">Crafted with <span>Numbers</span></h2>
+                <p class="section-subtitle">A quick look at what makes our kitchen truly exceptional.</p>
+            </div>
+
+            <div class="tasting-grid">
+                <div class="tasting-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tasting-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <div class="tasting-number" data-count="86">0</div>
+                    <div class="tasting-label">Signature Dishes</div>
+                </div>
+                <div class="tasting-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tasting-icon"><i class="fa-solid fa-hat-cowboy"></i></div>
+                    <div class="tasting-number" data-count="12">0</div>
+                    <div class="tasting-label">Expert Chefs</div>
+                </div>
+                <div class="tasting-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tasting-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="tasting-number" data-count="4.9" data-decimals="1">0</div>
+                    <div class="tasting-label">Guest Rating</div>
+                </div>
+                <div class="tasting-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tasting-icon"><i class="fa-solid fa-award"></i></div>
+                    <div class="tasting-number" data-count="24">0</div>
+                    <div class="tasting-label">Awards Won</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 9 — RESERVATION STRIP
+         ============================================================ -->
+    <section class="reservation-strip section-wrapper">
+        <div class="container">
+            <div class="reservation-strip-inner">
+                <div data-aos="fade-right" data-aos-duration="900">
+                    <h2>Reserve Your <span>Table Today</span></h2>
+                    <p>Skip the queue — book your spot in advance and enjoy a seamless dining experience with us.</p>
+
+                    <div class="reservation-strip-info">
+                        <div class="reservation-info-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Open Daily · 12 PM – 11 PM</span>
+                        </div>
+                        <div class="reservation-info-item">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-strip-form" data-aos="fade-left" data-aos-duration="900">
+                    <h4>Quick Reservation</h4>
+
+                    <div class="res-global-msg" id="resGlobalMsg"></div>
+
+                    <form id="reservationForm" novalidate>
+
+                        <div class="res-field">
+                            <input type="text" id="resName" class="res-input" placeholder="Your Full Name" autocomplete="name" />
+                            <div class="res-error" id="resNameError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+                        </div>
+
+                        <div class="res-field">
+                            <input type="tel" id="resPhone" class="res-input" placeholder="Phone Number (10 digits)" maxlength="10" autocomplete="tel" />
+                            <div class="res-error" id="resPhoneError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+                        </div>
+
+                        <div class="res-row">
+                            <div class="res-field">
+                                <input type="date" id="resDate" class="res-input" />
+                                <div class="res-error" id="resDateError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+                            </div>
+                            <div class="res-field">
+                                <input type="time" id="resTime" class="res-input" />
+                                <div class="res-error" id="resTimeError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+                            </div>
+                        </div>
+
+                        <div class="res-field">
+                            <input type="number" id="resGuests" class="res-input" placeholder="Number of Guests" min="1" max="20" />
+                            <div class="res-error" id="resGuestsError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+                        </div>
+
+                        <button type="submit" class="res-submit-btn" id="resSubmitBtn">
+                            <i class="fa-solid fa-check"></i> Confirm Reservation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 10 — FINAL CTA
+         ============================================================ -->
+    <section class="final-cta section-wrapper">
+        <div class="container">
+            <div class="final-cta-content">
+                <div class="final-cta-icon" data-aos="zoom-in" data-aos-duration="800">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h2 data-aos="fade-up" data-aos-delay="100">
+                    Hungry for <span>Something Special?</span>
+                </h2>
+                <p data-aos="fade-up" data-aos-delay="200">
+                    Whether it's a romantic dinner, family celebration or a business lunch — we have the perfect table for you.
+                </p>
+                <div class="final-cta-buttons" data-aos="fade-up" data-aos-delay="300">
+                    <a href="404.html" class="btn btn-primary">
+                        <i class="fa-solid fa-calendar-check"></i> Book a Table
+                    </a>
+                    <a href="404.html" class="btn btn-ghost">
+                        <i class="fa-solid fa-phone"></i> Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER PLACEHOLDER ===== -->
+    <div id="footer-placeholder"></div>
+
+    <!-- ===== AOS JS ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 80, delay: 0 });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('header.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('header-placeholder').innerHTML = d; initHeader();
+            }).catch(() => {});
+            fetch('footer.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('footer-placeholder').innerHTML = d; initFooter();
+            }).catch(() => {});
+            initCounters();
+            initDishVideo();
+            initImageLoaded();
+            initReservationForm();
+        });
+
+        function initHeader() {
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const header = document.getElementById('mainHeader');
+            if (menuBtn && mobileMenu && mobileOverlay) {
+                menuBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    mobileMenu.classList.add('open'); mobileOverlay.classList.add('open');
+                    document.body.style.overflow = 'hidden'; });
+            }
+            if (closeBtn && mobileMenu && mobileOverlay) {
+                closeBtn.addEventListener('click', e => { e.preventDefault();
+                    mobileMenu.classList.remove('open'); mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto'; });
+            }
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', e => { e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    mobileOverlay.classList.remove('open'); document.body.style.overflow = 'auto'; });
+            }
+            if (header) window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
+        }
+
+        function initFooter() {
+            const footerHamburger = document.getElementById('mobileHamburger');
+            const footerNavMenu = document.getElementById('mobileNavMenu');
+            if (footerHamburger && footerNavMenu) {
+                const nh = footerHamburger.cloneNode(true);
+                footerHamburger.parentNode.replaceChild(nh, footerHamburger);
+                nh.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    footerNavMenu.classList.toggle('open'); });
+            }
+        }
+
+        function initCounters() {
+            const counters = document.querySelectorAll('.tasting-number');
+            if (!counters.length) return;
+            const animateCounter = (el) => {
+                const target = parseFloat(el.getAttribute('data-count'));
+                const decimals = parseInt(el.getAttribute('data-decimals') || '0');
+                const duration = 2000, start = performance.now();
+                const step = (now) => {
+                    const p = Math.min((now - start) / duration, 1);
+                    const e = 1 - Math.pow(1 - p, 3);
+                    el.textContent = (target * e).toFixed(decimals);
+                    if (p < 1) requestAnimationFrame(step);
+                    else el.textContent = target.toFixed(decimals);
+                };
+                requestAnimationFrame(step);
+            };
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(en => { if (en.isIntersecting) { animateCounter(en.target); obs.unobserve(en.target); }});
+            }, { threshold: 0.5 });
+            counters.forEach(c => obs.observe(c));
+        }
+
+        function initDishVideo() {
+            const video = document.getElementById('dishVideo');
+            const btn = document.getElementById('dishPlayBtn');
+            if (!video || !btn) return;
+            btn.addEventListener('click', () => {
+                if (video.paused) { video.play(); btn.innerHTML = '<i class="fa-solid fa-pause"></i>'; }
+                else { video.pause(); btn.innerHTML = '<i class="fa-solid fa-play"></i>'; }
+            });
+        }
+
+        function initImageLoaded() {
+            document.querySelectorAll('img').forEach(img => {
+                const markLoaded = () => {
+                    const parent = img.closest('.img-wrap, .bento-card, .dining-room, .chef-sig-visual');
+                    if (parent) parent.classList.add('img-loaded');
+                };
+                if (img.complete && img.naturalWidth > 0) markLoaded();
+                else img.addEventListener('load', markLoaded);
+            });
+        }
+
+        // ============================================================
+        // RESERVATION FORM VALIDATION
+        // ============================================================
+        function initReservationForm() {
+            const form = document.getElementById('reservationForm');
+            if (!form) return;
+
+            const nameInput   = document.getElementById('resName');
+            const phoneInput  = document.getElementById('resPhone');
+            const dateInput   = document.getElementById('resDate');
+            const timeInput   = document.getElementById('resTime');
+            const guestsInput = document.getElementById('resGuests');
+            const submitBtn   = document.getElementById('resSubmitBtn');
+            const globalMsg   = document.getElementById('resGlobalMsg');
+
+            const nameError   = document.getElementById('resNameError');
+            const phoneError  = document.getElementById('resPhoneError');
+            const dateError   = document.getElementById('resDateError');
+            const timeError   = document.getElementById('resTimeError');
+            const guestsError = document.getElementById('resGuestsError');
+
+            function setFieldError(input, errEl, message) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                errEl.querySelector('span').textContent = message;
+                errEl.classList.add('show');
+            }
+            function setFieldValid(input, errEl) {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                errEl.classList.remove('show');
+            }
+            function clearFieldState(input, errEl) {
+                input.classList.remove('error', 'valid');
+                errEl.classList.remove('show');
+            }
+            function showGlobal(type, message) {
+                globalMsg.className = 'res-global-msg show ' + type;
+                const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                globalMsg.innerHTML = '<i class="fa-solid ' + icon + '"></i>' + message;
+            }
+            function hideGlobal() {
+                globalMsg.className = 'res-global-msg';
+                globalMsg.innerHTML = '';
+            }
+
+            // Name — letters and spaces only
+            nameInput.addEventListener('input', function () {
+                this.value = this.value.replace(/[^A-Za-z\s]/g, '').replace(/\s{2,}/g, ' ');
+                const v = this.value.trim();
+                if (!v) return clearFieldState(this, nameError);
+                if (v.length < 2) {
+                    setFieldError(this, nameError, 'Name must be at least 2 characters.');
+                } else if (!/^[A-Za-z][A-Za-z\s]*$/.test(v)) {
+                    setFieldError(this, nameError, 'Name can contain only letters and spaces.');
+                } else {
+                    setFieldValid(this, nameError);
+                }
+                hideGlobal();
+            });
+
+            // Phone — exactly 10 digits
+            phoneInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                const v = this.value;
+                if (!v) return clearFieldState(this, phoneError);
+                if (v.length < 10) {
+                    setFieldError(this, phoneError, 'Phone number must be exactly 10 digits (' + v.length + '/10).');
+                } else {
+                    setFieldValid(this, phoneError);
+                }
+                hideGlobal();
+            });
+
+            // Date
+            dateInput.addEventListener('change', function () {
+                if (!this.value) return clearFieldState(this, dateError);
+                const today = new Date(); today.setHours(0,0,0,0);
+                const chosen = new Date(this.value + 'T00:00:00');
+                if (chosen < today) {
+                    setFieldError(this, dateError, 'Date cannot be in the past.');
+                } else {
+                    setFieldValid(this, dateError);
+                }
+                hideGlobal();
+            });
+
+            // Time
+            timeInput.addEventListener('change', function () {
+                if (!this.value) return clearFieldState(this, timeError);
+                const [h, m] = this.value.split(':').map(Number);
+                const mins = h * 60 + m;
+                if (mins < 12 * 60 || mins > 23 * 60) {
+                    setFieldError(this, timeError, 'Reservations available between 12:00 PM and 11:00 PM.');
+                } else {
+                    setFieldValid(this, timeError);
+                }
+                hideGlobal();
+            });
+
+            // Guests
+            guestsInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '').slice(0, 2);
+                const v = parseInt(this.value, 10);
+                if (!this.value) return clearFieldState(this, guestsError);
+                if (!v || v < 1 || v > 20) {
+                    setFieldError(this, guestsError, 'Please enter between 1 and 20 guests.');
+                } else {
+                    setFieldValid(this, guestsError);
+                }
+                hideGlobal();
+            });
+
+            // Submit
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                hideGlobal();
+                let valid = true;
+                let firstInvalid = null;
+
+                // Name
+                const nameVal = nameInput.value.trim();
+                if (!nameVal) {
+                    setFieldError(nameInput, nameError, 'Please enter your full name.');
+                    if (!firstInvalid) firstInvalid = nameInput;
+                    valid = false;
+                } else if (nameVal.length < 2) {
+                    setFieldError(nameInput, nameError, 'Name must be at least 2 characters.');
+                    if (!firstInvalid) firstInvalid = nameInput;
+                    valid = false;
+                } else if (!/^[A-Za-z][A-Za-z\s]*$/.test(nameVal)) {
+                    setFieldError(nameInput, nameError, 'Name can contain only letters and spaces.');
+                    if (!firstInvalid) firstInvalid = nameInput;
+                    valid = false;
+                }
+
+                // Phone
+                const phoneVal = phoneInput.value.trim();
+                if (!phoneVal) {
+                    setFieldError(phoneInput, phoneError, 'Please enter your phone number.');
+                    if (!firstInvalid) firstInvalid = phoneInput;
+                    valid = false;
+                } else if (!/^\d{10}$/.test(phoneVal)) {
+                    setFieldError(phoneInput, phoneError, 'Phone number must be exactly 10 digits.');
+                    if (!firstInvalid) firstInvalid = phoneInput;
+                    valid = false;
+                }
+
+                // Date
+                if (!dateInput.value) {
+                    setFieldError(dateInput, dateError, 'Please select a date.');
+                    if (!firstInvalid) firstInvalid = dateInput;
+                    valid = false;
+                } else {
+                    const today = new Date(); today.setHours(0,0,0,0);
+                    const chosen = new Date(dateInput.value + 'T00:00:00');
+                    if (chosen < today) {
+                        setFieldError(dateInput, dateError, 'Date cannot be in the past.');
+                        if (!firstInvalid) firstInvalid = dateInput;
+                        valid = false;
+                    }
+                }
+
+                // Time
+                if (!timeInput.value) {
+                    setFieldError(timeInput, timeError, 'Please select a time.');
+                    if (!firstInvalid) firstInvalid = timeInput;
+                    valid = false;
+                } else {
+                    const [h, m] = timeInput.value.split(':').map(Number);
+                    const mins = h * 60 + m;
+                    if (mins < 12 * 60 || mins > 23 * 60) {
+                        setFieldError(timeInput, timeError, 'Reservations available between 12:00 PM and 11:00 PM.');
+                        if (!firstInvalid) firstInvalid = timeInput;
+                        valid = false;
+                    }
+                }
+
+                // Guests
+                const guestsVal = parseInt(guestsInput.value, 10);
+                if (!guestsInput.value) {
+                    setFieldError(guestsInput, guestsError, 'Please enter number of guests.');
+                    if (!firstInvalid) firstInvalid = guestsInput;
+                    valid = false;
+                } else if (!guestsVal || guestsVal < 1 || guestsVal > 20) {
+                    setFieldError(guestsInput, guestsError, 'Please enter between 1 and 20 guests.');
+                    if (!firstInvalid) firstInvalid = guestsInput;
+                    valid = false;
+                }
+
+                if (!valid) {
+                    showGlobal('error', 'Please correct the highlighted fields and try again.');
+                    if (firstInvalid) firstInvalid.focus();
+                    return;
+                }
+
+                // All valid → success + redirect
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Reserving…';
+
+                const payload = {
+                    name: nameVal,
+                    phone: phoneVal,
+                    date: dateInput.value,
+                    time: timeInput.value,
+                    guests: guestsVal,
+                    submittedAt: Date.now()
+                };
+
+                try { sessionStorage.setItem('reservation_success', JSON.stringify(payload)); } catch (e) {}
+
+                showGlobal('success',
+                    'Thank you, <strong>' + nameVal.split(' ')[0] + '</strong>! ' +
+                    'Your table for <strong>' + guestsVal + '</strong> guest(s) on ' +
+                    '<strong>' + dateInput.value + '</strong> at <strong>' + timeInput.value + '</strong> is confirmed. ' +
+                    'Redirecting…'
+                );
+
+                setTimeout(() => {
+                    window.location.href = '404.html';
+                }, 1600);
+            });
+        }
+
+        window.addEventListener('load', () => { document.body.style.overflowX = 'hidden'; });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Restaurant & Hotel - Rooms</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body { background: #FDF9F3; color: #3E2C1B; overflow-x: hidden; width: 100%; max-width: 100vw; padding-top: 100px; }
+        img, video { max-width: 100%; display: block; }
+        a { text-decoration: none; color: inherit; }
+        .section-wrapper { width: 100%; overflow-x: hidden; }
+
+        :root {
+            --cream: #FDF9F3;
+            --white: #FFFFFF;
+            --espresso: #3E2C1B;
+            --espresso-dark: #2A1D10;
+            --terracotta: #B47C4D;
+            --terracotta-dark: #8B5A2B;
+            --gold: #C48B5C;
+            --muted: #7A6B5A;
+            --border: rgba(180, 124, 77, 0.15);
+        }
+
+        .container { width: 92%; max-width: 1280px; margin: 0 auto; }
+        .section { padding: 80px 0; position: relative; }
+
+        .section-header { text-align: center; margin-bottom: 50px; max-width: 720px; margin-left: auto; margin-right: auto; }
+
+        .section-title { font-size: 2.4rem; font-weight: 800; color: var(--espresso); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 14px; }
+        .section-title span { color: var(--terracotta); }
+        .section-subtitle { font-size: 1rem; color: var(--muted); line-height: 1.7; font-weight: 500; }
+
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(180, 124, 77, 0.10); color: var(--terracotta-dark);
+            padding: 8px 18px; border-radius: 30px;
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.2px; margin-bottom: 18px; border: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 30px; border-radius: 50px;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 0.4px;
+            cursor: pointer; transition: all 0.35s ease;
+            border: 2px solid transparent; white-space: nowrap; font-family: inherit;
+        }
+        .btn-primary { background: var(--terracotta); color: #FFFFFF; box-shadow: 0 8px 24px rgba(180, 124, 77, 0.35); }
+        .btn-primary:hover { background: var(--terracotta-dark); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(139, 90, 43, 0.5); }
+        .btn-outline { background: transparent; color: var(--terracotta-dark); border: 2px solid var(--terracotta); }
+        .btn-outline:hover { background: rgba(180, 124, 77, 0.08); transform: translateY(-3px); }
+        .btn-white { background: #FFFFFF; color: var(--espresso); }
+        .btn-white:hover { background: var(--cream); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+        .btn-ghost { background: rgba(255, 255, 255, 0.15); color: #FFFFFF; border: 2px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(6px); }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.25); border-color: #FFFFFF; transform: translateY(-3px); }
+
+        .section-cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 44px; }
+
+        .img-wrap {
+            position: relative;
+            background: linear-gradient(135deg, #F5EDE3 0%, #E8DCCC 100%);
+            overflow: hidden;
+        }
+        .img-wrap::before {
+            content: '\f03e'; font-family: 'Font Awesome 6 Free'; font-weight: 400;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 3rem; color: rgba(180, 124, 77, 0.35);
+            pointer-events: none; z-index: 0;
+        }
+        .img-wrap img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .img-wrap.img-loaded::before { display: none; }
+
+        /* ============================================================
+           SECTION 1 — HERO WITH OVERLAPPING LABELS
+           ============================================================ */
+        .hero-labels {
+            position: relative;
+            background: linear-gradient(135deg, #2A1D10 0%, #3E2C1B 100%);
+            padding: 90px 0 120px;
+            overflow: hidden;
+            color: #FFFFFF;
+        }
+        .hero-labels::before {
+            content: '';
+            position: absolute;
+            top: -150px; right: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(180, 124, 77, 0.22), transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-labels-inner {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-labels-content .section-tag {
+            background: rgba(196, 139, 92, 0.2);
+            color: var(--gold);
+            border-color: rgba(196, 139, 92, 0.35);
+        }
+        .hero-labels-title {
+            font-size: 3.2rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 22px;
+        }
+        .hero-labels-title span {
+            background: linear-gradient(135deg, #C48B5C, #FFD9A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-labels-desc {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.75;
+            margin-bottom: 30px;
+        }
+        .hero-labels-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+
+        .hero-labels-visual {
+            position: relative;
+            height: 500px;
+        }
+        .hero-labels-img-main {
+            position: absolute;
+            top: 0; right: 0;
+            width: 85%;
+            height: 78%;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #3E2C1B, #2A1D10);
+        }
+        .hero-labels-img-main img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-labels-img-small {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 55%;
+            height: 50%;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 8px solid var(--espresso-dark);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+            background: linear-gradient(135deg, #3E2C1B, #2A1D10);
+        }
+        .hero-labels-img-small img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-label {
+            position: absolute;
+            background: #FFFFFF;
+            color: var(--espresso);
+            padding: 12px 18px;
+            border-radius: 14px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3;
+            min-width: 180px;
+        }
+        .hero-label i {
+            width: 38px; height: 38px;
+            background: rgba(180, 124, 77, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terracotta);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .hero-label strong { display: block; font-size: 0.85rem; font-weight: 800; color: var(--espresso); }
+        .hero-label span { font-size: 0.68rem; color: var(--muted); font-weight: 600; }
+        .hero-label.hl-1 { top: 30%; left: -20px; }
+        .hero-label.hl-2 { bottom: 12%; right: -20px; }
+
+        /* ============================================================
+           SECTION 2 — STATS BAR WITH ICONS (Not buttons — real stats)
+           ============================================================ */
+        .stats-bar {
+            background: var(--white);
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .stats-bar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .stat-bar-card {
+            background: linear-gradient(135deg, #FDF9F3, #F5EDE3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 26px 22px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.35s ease;
+        }
+        .stat-bar-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(180, 124, 77, 0.15);
+            border-color: rgba(180, 124, 77, 0.35);
+        }
+        .stat-bar-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            box-shadow: 0 10px 24px rgba(180, 124, 77, 0.35);
+        }
+        .stat-bar-text strong {
+            display: block;
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--espresso);
+            line-height: 1;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+        .stat-bar-text span {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        /* ============================================================
+           SECTION 3 — ROOM CARDS WITH HORIZONTAL SPLIT SLIDER (Featured row)
+           ============================================================ */
+        .room-showcase {
+            background: linear-gradient(180deg, #FDF9F3 0%, #F5EDE3 100%);
+            padding: 90px 0;
+        }
+        .room-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .showcase-card {
+            background: var(--white);
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 6px 24px rgba(62, 44, 27, 0.06);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(180, 124, 77, 0.2);
+            border-color: rgba(180, 124, 77, 0.4);
+        }
+        .showcase-img {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+        }
+        .showcase-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .showcase-card:hover .showcase-img img { transform: scale(1.08); }
+        .showcase-num {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -0.5px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+        .showcase-badge {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            background: var(--terracotta);
+            color: #FFFFFF;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 8px 20px rgba(180, 124, 77, 0.4);
+            z-index: 2;
+        }
+        .showcase-body {
+            padding: 22px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .showcase-body h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+        .showcase-body p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+        .showcase-specs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .showcase-spec {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            background: rgba(180, 124, 77, 0.08);
+            color: var(--terracotta-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.4px;
+        }
+        .showcase-spec i { font-size: 0.68rem; color: var(--terracotta); }
+        .showcase-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .showcase-price {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -0.6px;
+            line-height: 1;
+        }
+        .showcase-price small {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            margin-top: 3px;
+            text-transform: uppercase;
+        }
+        .showcase-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            background: var(--terracotta);
+            color: #FFFFFF;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            transition: all 0.3s ease;
+        }
+        .showcase-btn:hover { background: var(--terracotta-dark); transform: translateY(-2px); }
+
+        /* ============================================================
+           SECTION 4 — SPLIT-PANE VIDEO-STYLE SHOWCASE
+           ============================================================ */
+        .split-pane {
+            background: var(--white);
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 620px;
+        }
+        .split-pane-visual {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+        }
+        .split-pane-visual img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .split-pane-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(42, 29, 16, 0.4) 0%, transparent 60%);
+        }
+        .split-pane-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.35s ease;
+        }
+        .split-pane-play:hover {
+            background: #FFFFFF;
+            color: var(--terracotta);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        .split-pane-content {
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #FDF9F3, #F5EDE3);
+        }
+        .split-pane-content .section-tag { margin-bottom: 16px; }
+        .split-pane-content h2 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--espresso);
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            margin-bottom: 18px;
+        }
+        .split-pane-content h2 span { color: var(--terracotta); }
+        .split-pane-content > p {
+            font-size: 0.98rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 28px;
+        }
+        .split-pane-features {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+        .split-pane-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .split-pane-feature:last-child { border-bottom: none; padding-bottom: 0; }
+        .split-pane-feature-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--terracotta);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .split-pane-feature-text strong {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 2px;
+        }
+        .split-pane-feature-text span {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .split-pane-content .btn { align-self: flex-start; }
+
+        /* ============================================================
+           SECTION 5 — ROOM TABS (Horizontal Tabs — Different from Filters)
+           ============================================================ */
+        .room-tabs {
+            background: var(--white);
+            padding: 90px 0;
+        }
+        .tabs-head {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0;
+        }
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 26px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--muted);
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: -2px;
+        }
+        .tab-btn i { font-size: 0.9rem; }
+        .tab-btn:hover { color: var(--terracotta-dark); }
+        .tab-btn.active {
+            color: var(--terracotta);
+            border-bottom-color: var(--terracotta);
+        }
+        .tab-btn.active i { color: var(--terracotta); }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .tab-img {
+            position: relative;
+            border-radius: 22px;
+            overflow: hidden;
+            height: 420px;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+            box-shadow: 0 25px 70px rgba(62, 44, 27, 0.15);
+        }
+        .tab-img img { width: 100%; height: 100%; object-fit: cover; }
+        .tab-info h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--espresso);
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .tab-info h3 span { color: var(--terracotta); }
+        .tab-info > p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 22px;
+        }
+        .tab-amenity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .tab-amenity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--espresso);
+        }
+        .tab-amenity i {
+            width: 28px; height: 28px;
+            background: rgba(180, 124, 77, 0.12);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terracotta);
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+        .tab-price-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .tab-price strong {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--terracotta);
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+        .tab-price strong small {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .tab-price span {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           SECTION 6 — AMENITY MATRIX (Big icons grid — different from previous)
+           ============================================================ */
+        .amenity-matrix {
+            background: linear-gradient(135deg, #F5EDE3 0%, #FDF9F3 100%);
+            padding: 90px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .amenity-matrix::before {
+            content: 'AMENITIES';
+            position: absolute;
+            top: 40px;
+            left: -20px;
+            font-size: 9rem;
+            font-weight: 900;
+            color: rgba(180, 124, 77, 0.05);
+            letter-spacing: -6px;
+            line-height: 1;
+            z-index: 0;
+        }
+        .amenity-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .matrix-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 28px 22px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+        .matrix-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 50px rgba(180, 124, 77, 0.15);
+            border-color: rgba(180, 124, 77, 0.4);
+        }
+        .matrix-card-icon {
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(180, 124, 77, 0.15), rgba(196, 139, 92, 0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terracotta);
+            font-size: 1.3rem;
+            transition: all 0.4s ease;
+        }
+        .matrix-card:hover .matrix-card-icon {
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            color: #FFFFFF;
+            transform: rotate(-6deg);
+        }
+        .matrix-card-text h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 6px;
+        }
+        .matrix-card-text p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           SECTION 7 — FEATURED TESTIMONIAL (Single big quote)
+           ============================================================ */
+        .room-testimonial {
+            background: var(--white);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .room-testimonial::before {
+            content: '"';
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 20rem;
+            font-family: Georgia, serif;
+            color: rgba(180, 124, 77, 0.08);
+            line-height: 0.8;
+            z-index: 0;
+        }
+        .testi-featured {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 50px;
+            align-items: center;
+            max-width: 1080px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #FDF9F3, #F5EDE3);
+            border-radius: 24px;
+            padding: 50px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 70px rgba(62, 44, 27, 0.08);
+        }
+        .testi-featured-img {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 380px;
+            background: linear-gradient(135deg, #F5EDE3, #E8DCCC);
+        }
+        .testi-featured-img img { width: 100%; height: 100%; object-fit: cover; }
+        .testi-featured-content .stars {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+        .testi-featured-content .quote {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--espresso);
+            letter-spacing: -0.4px;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+        .testi-featured-content .quote span { color: var(--terracotta); }
+        .testi-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .testi-author-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--white);
+            box-shadow: 0 8px 20px rgba(180, 124, 77, 0.2);
+            background: rgba(180, 124, 77, 0.15);
+            position: relative;
+        }
+        .testi-author-avatar::before {
+            content: '\f007'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: rgba(180, 124, 77, 0.6); z-index: 0;
+        }
+        .testi-author-avatar img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+        .testi-author-info strong {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--espresso);
+            margin-bottom: 3px;
+        }
+        .testi-author-info span {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .testi-author-info .room-stayed {
+            font-size: 0.72rem;
+            color: var(--terracotta);
+            font-weight: 700;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* ============================================================
+           SECTION 8 — CTA WITH TWO COLUMN LAYOUT
+           ============================================================ */
+        .rooms-cta {
+            background: var(--espresso);
+            color: #FFFFFF;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .rooms-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(196, 139, 92, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(196, 139, 92, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .rooms-cta::after {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(180, 124, 77, 0.2), transparent 70%);
+            border-radius: 50%;
+        }
+        .rooms-cta-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .rooms-cta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(196, 139, 92, 0.2);
+            color: var(--gold);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(196, 139, 92, 0.35);
+        }
+        .rooms-cta h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+        .rooms-cta h2 span {
+            background: linear-gradient(135deg, #C48B5C, #FFD9A8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .rooms-cta p {
+            font-size: 1.02rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+        .rooms-cta-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .rooms-cta-contact {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(196, 139, 92, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+        }
+        .rooms-cta-contact h4 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .contact-line {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(196, 139, 92, 0.2);
+        }
+        .contact-line:last-child { border-bottom: none; padding-bottom: 0; }
+        .contact-line i {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 12px;
+            background: rgba(196, 139, 92, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .contact-line strong {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 3px;
+        }
+        .contact-line span {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .hero-labels-inner { grid-template-columns: 1fr; gap: 50px; }
+            .hero-labels-visual { height: 420px; max-width: 520px; margin: 0 auto; width: 100%; }
+            .hero-labels-title { font-size: 2.6rem; }
+            .hero-label.hl-1 { left: 0; }
+            .hero-label.hl-2 { right: 0; }
+
+            .stats-bar-grid { grid-template-columns: 1fr 1fr; }
+
+            .room-showcase-grid { grid-template-columns: 1fr 1fr; }
+
+            .split-pane { grid-template-columns: 1fr; min-height: auto; }
+            .split-pane-visual { height: 400px; }
+            .split-pane-content { padding: 60px 40px; }
+
+            .tab-inner { grid-template-columns: 1fr; gap: 36px; }
+            .tab-img { height: 360px; }
+
+            .amenity-matrix-grid { grid-template-columns: 1fr 1fr; }
+
+            .testi-featured { grid-template-columns: 1fr; padding: 40px; gap: 30px; }
+            .testi-featured-img { height: 280px; }
+            .testi-featured-content .quote { font-size: 1.2rem; }
+
+            .rooms-cta-inner { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 90px; }
+            .section { padding: 60px 0; }
+            .section-title { font-size: 1.7rem; }
+            .section-subtitle { font-size: 0.9rem; }
+            .section-header { margin-bottom: 36px; }
+            .section-cta { margin-top: 32px; }
+
+            .hero-labels { padding: 60px 0 80px; }
+            .hero-labels-title { font-size: 2rem; letter-spacing: -1px; }
+            .hero-labels-desc { font-size: 0.92rem; }
+            .hero-labels-buttons { flex-direction: column; align-items: stretch; }
+            .hero-labels-buttons .btn { width: 100%; }
+            .hero-labels-visual { height: 340px; }
+            .hero-labels-img-main { width: 78%; height: 75%; }
+            .hero-labels-img-small { width: 55%; height: 45%; }
+            .hero-label { padding: 10px 14px; min-width: 150px; gap: 10px; }
+            .hero-label i { width: 34px; height: 34px; font-size: 0.85rem; }
+            .hero-label strong { font-size: 0.78rem; }
+            .hero-label span { font-size: 0.62rem; }
+
+            .stats-bar { padding: 40px 0; }
+            .stats-bar-grid { grid-template-columns: 1fr; gap: 14px; }
+            .stat-bar-card { padding: 20px 18px; }
+            .stat-bar-icon { width: 48px; height: 48px; font-size: 1.15rem; }
+            .stat-bar-text strong { font-size: 1.4rem; }
+            .stat-bar-text span { font-size: 0.7rem; }
+
+            .room-showcase { padding: 60px 0; }
+            .room-showcase-grid { grid-template-columns: 1fr; gap: 20px; }
+            .showcase-img { height: 220px; }
+
+            .split-pane-visual { height: 320px; }
+            .split-pane-play { width: 68px; height: 68px; font-size: 1.3rem; }
+            .split-pane-content { padding: 50px 24px; }
+            .split-pane-content h2 { font-size: 1.75rem; }
+            .split-pane-content > p { font-size: 0.88rem; }
+            .split-pane-feature-num { width: 30px; height: 30px; font-size: 0.7rem; }
+
+            .room-tabs { padding: 60px 0; }
+            .tabs-head { gap: 4px; overflow-x: auto; flex-wrap: nowrap; justify-content: flex-start; padding: 0 4px; scrollbar-width: none; }
+            .tabs-head::-webkit-scrollbar { display: none; }
+            .tab-btn { padding: 14px 18px; font-size: 0.8rem; white-space: nowrap; flex-shrink: 0; }
+            .tab-img { height: 260px; }
+            .tab-info h3 { font-size: 1.5rem; }
+            .tab-amenity-grid { grid-template-columns: 1fr; gap: 10px; }
+            .tab-price strong { font-size: 1.6rem; }
+
+            .amenity-matrix { padding: 60px 0; }
+            .amenity-matrix::before { font-size: 5rem; top: 20px; }
+            .amenity-matrix-grid { grid-template-columns: 1fr; gap: 14px; }
+            .matrix-card { padding: 20px 18px; gap: 14px; }
+            .matrix-card-icon { width: 46px; height: 46px; min-width: 46px; font-size: 1.1rem; }
+            .matrix-card-text h4 { font-size: 0.9rem; }
+            .matrix-card-text p { font-size: 0.75rem; }
+
+            .room-testimonial { padding: 60px 0; }
+            .room-testimonial::before { font-size: 10rem; top: 20px; left: 20px; }
+            .testi-featured { padding: 26px; gap: 24px; }
+            .testi-featured-img { height: 220px; }
+            .testi-featured-content .quote { font-size: 1rem; }
+            .testi-author-avatar { width: 48px; height: 48px; }
+            .testi-author-info strong { font-size: 0.88rem; }
+            .testi-author-info span { font-size: 0.72rem; }
+
+            .rooms-cta { padding: 70px 0; }
+            .rooms-cta h2 { font-size: 1.9rem; letter-spacing: -1px; }
+            .rooms-cta p { font-size: 0.9rem; }
+            .rooms-cta-buttons { flex-direction: column; align-items: stretch; }
+            .rooms-cta-buttons .btn { width: 100%; }
+            .rooms-cta-contact { padding: 24px; }
+            .contact-line { padding: 12px 0; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding-top: 80px; }
+            .section { padding: 50px 0; }
+            .section-title { font-size: 1.45rem; }
+            .section-tag { font-size: 0.68rem; padding: 6px 14px; }
+
+            .hero-labels-title { font-size: 1.65rem; }
+            .hero-labels-visual { height: 300px; }
+            .hero-label.hl-1 { display: none; }
+
+            .showcase-body { padding: 18px; }
+            .showcase-body h3 { font-size: 1.05rem; }
+
+            .split-pane-visual { height: 260px; }
+            .split-pane-content { padding: 40px 20px; }
+            .split-pane-content h2 { font-size: 1.5rem; }
+
+            .tab-btn { padding: 12px 14px; font-size: 0.75rem; }
+            .tab-img { height: 220px; }
+
+            .rooms-cta h2 { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 1024px) {
+            html, body { overflow-x: hidden !important; max-width: 100vw; }
+            .section-wrapper, .container, section { max-width: 100vw; }
+            img, video, iframe { max-width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER PLACEHOLDER ===== -->
+    <div id="header-placeholder"></div>
+
+    <!-- ============================================================
+         SECTION 1 — HERO WITH OVERLAPPING LABELS
+         ============================================================ -->
+    <section class="hero-labels section-wrapper">
+        <div class="container">
+            <div class="hero-labels-inner">
+                <div class="hero-labels-content" data-aos="fade-right" data-aos-duration="900">
+                    <div class="section-tag"><i class="fa-solid fa-bed"></i> Our Accommodation</div>
+                    <h1 class="hero-labels-title" data-aos="fade-up" data-aos-delay="100">
+                        Find Your Perfect<br /><span>Home Away</span>
+                    </h1>
+                    <p class="hero-labels-desc" data-aos="fade-up" data-aos-delay="200">
+                        From cosy standard rooms to presidential suites — every room at our hotel is designed to give you comfort, elegance and unforgettable memories.
+                    </p>
+                    <div class="hero-labels-buttons" data-aos="fade-up" data-aos-delay="300">
+                        <a href="404.html" class="btn btn-primary">
+                            <i class="fa-solid fa-calendar-check"></i> Book a Room
+                        </a>
+                        <a href="404.html" class="btn btn-ghost">
+                            <i class="fa-solid fa-images"></i> View Gallery
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-labels-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="hero-labels-img-main img-wrap">
+                        <img src="room8.webp" alt="Luxury room"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="hero-labels-img-small img-wrap">
+                        <img src="room7.webp" alt="Bedroom detail"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&auto=format&fit=crop';" />
+                    </div>
+                    <div class="hero-label hl-1">
+                        <i class="fa-solid fa-award"></i>
+                        <div>
+                            <strong>Award Winning</strong>
+                            <span>Best boutique hotel</span>
+                        </div>
+                    </div>
+                    <div class="hero-label hl-2">
+                        <i class="fa-solid fa-star"></i>
+                        <div>
+                            <strong>4.9 Rating</strong>
+                            <span>From 2,400+ guests</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 2 — STATS BAR (Real stats, not buttons)
+         ============================================================ -->
+    <section class="stats-bar section-wrapper">
+        <div class="container">
+            <div class="stats-bar-grid">
+                <div class="stat-bar-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-bar-icon"><i class="fa-solid fa-bed"></i></div>
+                    <div class="stat-bar-text">
+                        <strong>80+</strong>
+                        <span>Rooms & Suites</span>
+                    </div>
+                </div>
+                <div class="stat-bar-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-bar-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="stat-bar-text">
+                        <strong>4.9</strong>
+                        <span>Guest Rating</span>
+                    </div>
+                </div>
+                <div class="stat-bar-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-bar-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="stat-bar-text">
+                        <strong>24/7</strong>
+                        <span>Room Service</span>
+                    </div>
+                </div>
+                <div class="stat-bar-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-bar-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="stat-bar-text">
+                        <strong>100%</strong>
+                        <span>Safe & Secure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 3 — ROOM SHOWCASE (Numbered cards)
+         ============================================================ -->
+    <section class="room-showcase section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-door-open"></i> Explore Rooms</div>
+                <h2 class="section-title">Choose Your <span>Comfort</span></h2>
+                <p class="section-subtitle">A curated selection of our most-loved rooms — each designed for a unique experience.</p>
+            </div>
+
+            <div class="room-showcase-grid">
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="showcase-img img-wrap">
+                        <div class="showcase-num">01</div>
+                        <img src="room6.webp" alt="Standard Room"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&auto=format&fit=crop';" />
+                        <div class="showcase-badge">Value</div>
+                    </div>
+                    <div class="showcase-body">
+                        <h3>Standard Room</h3>
+                        <p>Comfortable room with queen bed, perfect for solo travellers and short stays.</p>
+                        <div class="showcase-specs">
+                            <span class="showcase-spec"><i class="fa-solid fa-expand"></i> 30 m²</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-user"></i> 2 Guests</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-bed"></i> Queen Bed</span>
+                        </div>
+                        <div class="showcase-footer">
+                            <div class="showcase-price">
+                                $140
+                                <small>per night</small>
+                            </div>
+                            <a href="404.html" class="showcase-btn">
+                                Book <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="showcase-img img-wrap">
+                        <div class="showcase-num">02</div>
+                        <img src="room5.webp" alt="Deluxe Room"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&auto=format&fit=crop';" />
+                        <div class="showcase-badge">Popular</div>
+                    </div>
+                    <div class="showcase-body">
+                        <h3>Deluxe Room</h3>
+                        <p>Spacious room with king bed, elegant interiors and stunning city view.</p>
+                        <div class="showcase-specs">
+                            <span class="showcase-spec"><i class="fa-solid fa-expand"></i> 45 m²</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-user"></i> 2 Guests</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-city"></i> City View</span>
+                        </div>
+                        <div class="showcase-footer">
+                            <div class="showcase-price">
+                                $240
+                                <small>per night</small>
+                            </div>
+                            <a href="404.html" class="showcase-btn">
+                                Book <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="showcase-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="showcase-img img-wrap">
+                        <div class="showcase-num">03</div>
+                        <img src="room4.webp" alt="Presidential Suite"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&auto=format&fit=crop';" />
+                        <div class="showcase-badge">Luxury</div>
+                    </div>
+                    <div class="showcase-body">
+                        <h3>Presidential Suite</h3>
+                        <p>Our most luxurious suite with panoramic views and private terrace.</p>
+                        <div class="showcase-specs">
+                            <span class="showcase-spec"><i class="fa-solid fa-expand"></i> 90 m²</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-user"></i> 2 Guests</span>
+                            <span class="showcase-spec"><i class="fa-solid fa-hot-tub"></i> Jacuzzi</span>
+                        </div>
+                        <div class="showcase-footer">
+                            <div class="showcase-price">
+                                $480
+                                <small>per night</small>
+                            </div>
+                            <a href="404.html" class="showcase-btn">
+                                Book <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-outline">
+                    <i class="fa-solid fa-bed"></i> View All 80 Rooms
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 4 — SPLIT-PANE VIDEO-STYLE SHOWCASE
+         ============================================================ -->
+    <section class="split-pane section-wrapper">
+        <div class="split-pane-visual">
+            <img src="room3.webp" alt="Room tour"
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1000&auto=format&fit=crop';" />
+            <div class="split-pane-overlay"></div>
+            <!-- <div class="split-pane-play">
+                <i class="fa-solid fa-play"></i>
+            </div> -->
+        </div>
+        <div class="split-pane-content">
+            <div class="section-tag"><i class="fa-solid fa-video"></i> Virtual Tour</div>
+            <h2>Take a <span>Virtual Tour</span> of Our Rooms</h2>
+            <p>Explore our rooms and suites from the comfort of your home. Click play to walk through every corner.</p>
+
+            <div class="split-pane-features">
+                <div class="split-pane-feature">
+                    <div class="split-pane-feature-num">01</div>
+                    <div class="split-pane-feature-text">
+                        <strong>Interactive Room Views</strong>
+                        <span>See every corner in high definition</span>
+                    </div>
+                </div>
+                <div class="split-pane-feature">
+                    <div class="split-pane-feature-num">02</div>
+                    <div class="split-pane-feature-text">
+                        <strong>Amenity Walkthroughs</strong>
+                        <span>Discover everything included in the room</span>
+                    </div>
+                </div>
+                <div class="split-pane-feature">
+                    <div class="split-pane-feature-num">03</div>
+                    <div class="split-pane-feature-text">
+                        <strong>Real Guest Views</strong>
+                        <span>Unedited footage from real visits</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="404.html" class="btn btn-primary">
+                <i class="fa-solid fa-play"></i> Start Virtual Tour
+            </a>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 5 — ROOM TABS (Horizontal Tabs)
+         ============================================================ -->
+    <section class="room-tabs section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-layer-group"></i> Compare Rooms</div>
+                <h2 class="section-title">Switch Between <span>Room Types</span></h2>
+                <p class="section-subtitle">Click through tabs to see what each room offers at a glance.</p>
+            </div>
+
+            <div class="tabs-head" data-aos="fade-up">
+                <button class="tab-btn active" data-tab="standard">
+                    <i class="fa-solid fa-bed"></i> Standard
+                </button>
+                <button class="tab-btn" data-tab="deluxe">
+                    <i class="fa-solid fa-crown"></i> Deluxe
+                </button>
+                <button class="tab-btn" data-tab="executive">
+                    <i class="fa-solid fa-briefcase"></i> Executive
+                </button>
+                <button class="tab-btn" data-tab="presidential">
+                    <i class="fa-solid fa-gem"></i> Presidential
+                </button>
+            </div>
+
+            <div class="tab-content active" id="tab-standard">
+                <div class="tab-inner">
+                    <div class="tab-img img-wrap">
+                        <img src="room2.webp" alt="Standard Room"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="tab-info">
+                        <h3>Standard <span>Room</span></h3>
+                        <p>Ideal for solo travellers or couples seeking comfort on a budget. Simple, elegant and functional.</p>
+                        <div class="tab-amenity-grid">
+                            <div class="tab-amenity"><i class="fa-solid fa-wifi"></i> Free WiFi</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-tv"></i> 43" Smart TV</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-shower"></i> Rain Shower</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-mug-hot"></i> Tea & Coffee</div>
+                        </div>
+                        <div class="tab-price-row">
+                            <div class="tab-price">
+                                <strong>$140 <small>/ night</small></strong>
+                                <span>30 m² · Queen Bed</span>
+                            </div>
+                            <a href="404.html" class="btn btn-primary">
+                                <i class="fa-solid fa-key"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-deluxe">
+                <div class="tab-inner">
+                    <div class="tab-img img-wrap">
+                        <img src="room1.webp" alt="Deluxe Room"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="tab-info">
+                        <h3>Deluxe <span>Room</span></h3>
+                        <p>Spacious and stylish, with a king-size bed, city views and premium toiletries.</p>
+                        <div class="tab-amenity-grid">
+                            <div class="tab-amenity"><i class="fa-solid fa-wifi"></i> Fast WiFi</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-tv"></i> 55" Smart TV</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-city"></i> City View</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-bath"></i> Bathtub</div>
+                        </div>
+                        <div class="tab-price-row">
+                            <div class="tab-price">
+                                <strong>$240 <small>/ night</small></strong>
+                                <span>45 m² · King Bed</span>
+                            </div>
+                            <a href="404.html" class="btn btn-primary">
+                                <i class="fa-solid fa-key"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-executive">
+                <div class="tab-inner">
+                    <div class="tab-img img-wrap">
+                        <img src="room8.webp" alt="Executive Suite"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="tab-info">
+                        <h3>Executive <span>Suite</span></h3>
+                        <p>Elegant suite with separate living area — ideal for business travellers and long stays.</p>
+                        <div class="tab-amenity-grid">
+                            <div class="tab-amenity"><i class="fa-solid fa-wifi"></i> Fast WiFi</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-couch"></i> Living Area</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-briefcase"></i> Work Desk</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-mug-hot"></i> Espresso Bar</div>
+                        </div>
+                        <div class="tab-price-row">
+                            <div class="tab-price">
+                                <strong>$320 <small>/ night</small></strong>
+                                <span>60 m² · King Bed</span>
+                            </div>
+                            <a href="404.html" class="btn btn-primary">
+                                <i class="fa-solid fa-key"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-presidential">
+                <div class="tab-inner">
+                    <div class="tab-img img-wrap">
+                        <img src="room7.webp" alt="Presidential Suite"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&auto=format&fit=crop';" />
+                    </div>
+                    <div class="tab-info">
+                        <h3>Presidential <span>Suite</span></h3>
+                        <p>Our crown jewel — panoramic views, private terrace, jacuzzi and 24/7 butler service.</p>
+                        <div class="tab-amenity-grid">
+                            <div class="tab-amenity"><i class="fa-solid fa-gem"></i> Butler Service</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-hot-tub"></i> Jacuzzi</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-mountain"></i> Panoramic View</div>
+                            <div class="tab-amenity"><i class="fa-solid fa-utensils"></i> Private Dining</div>
+                        </div>
+                        <div class="tab-price-row">
+                            <div class="tab-price">
+                                <strong>$480 <small>/ night</small></strong>
+                                <span>90 m² · 2 Guests</span>
+                            </div>
+                            <a href="404.html" class="btn btn-primary">
+                                <i class="fa-solid fa-key"></i> Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 6 — AMENITY MATRIX
+         ============================================================ -->
+    <section class="amenity-matrix section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-concierge-bell"></i> What's Included</div>
+                <h2 class="section-title">Every Room Comes <span>Well-Equipped</span></h2>
+                <p class="section-subtitle">Thoughtful amenities in every room — because comfort is in the details.</p>
+            </div>
+
+            <div class="amenity-matrix-grid">
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-wifi"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>High-Speed WiFi</h4>
+                        <p>Complimentary fiber internet in every room for work or streaming.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-snowflake"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Climate Control</h4>
+                        <p>Individually controlled heating and cooling for perfect comfort.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-tv"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Smart TV & Streaming</h4>
+                        <p>55" 4K screens with Netflix, YouTube and streaming apps built in.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-mug-hot"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Tea & Coffee Station</h4>
+                        <p>Complimentary espresso machine and premium tea selection.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-shower"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Rain Shower</h4>
+                        <p>Premium toiletries, soft towels and rainfall showerheads.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-vault"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>In-Room Safe</h4>
+                        <p>Digital safe for your valuables, large enough for laptops.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="700">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-bell-concierge"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>24/7 Room Service</h4>
+                        <p>Order food, drinks or essentials anytime, day or night.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="800">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-broom"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Daily Housekeeping</h4>
+                        <p>Fresh linens, cleaning and turndown service every day.</p>
+                    </div>
+                </div>
+
+                <div class="matrix-card" data-aos="fade-up" data-aos-delay="900">
+                    <div class="matrix-card-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="matrix-card-text">
+                        <h4>Direct Line</h4>
+                        <p>Direct phone to reception, concierge and room service.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-primary">
+                    <i class="fa-solid fa-list-check"></i> See All Amenities
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 7 — FEATURED TESTIMONIAL
+         ============================================================ -->
+    <section class="room-testimonial section-wrapper">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-tag"><i class="fa-solid fa-quote-left"></i> Guest Story</div>
+                <h2 class="section-title">What Our <span>Guests Say</span></h2>
+                <p class="section-subtitle">Real stories from real guests who experienced our rooms.</p>
+            </div>
+
+            <div class="testi-featured" data-aos="fade-up" data-aos-duration="900">
+                <div class="testi-featured-img img-wrap">
+                    <img src="room6.webp" alt="Guest"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&auto=format&fit=crop';" />
+                </div>
+                <div class="testi-featured-content">
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="quote">
+                        From the moment we walked in, we knew this was special. The <span>Deluxe Room</span> exceeded every expectation — the bed was heavenly, the view was breathtaking, and the staff treated us like family. We will absolutely be back.
+                    </p>
+                    <div class="testi-author">
+                        <div class="testi-author-avatar">
+                            <img src="room5.webp" alt="Emma Wilson"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop';" />
+                        </div>
+                        <div class="testi-author-info">
+                            <strong>Emma Wilson</strong>
+                            <span>London, United Kingdom</span>
+                            <span class="room-stayed"><i class="fa-solid fa-bed"></i> Stayed in Deluxe Room</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-aos="fade-up">
+                <a href="404.html" class="btn btn-outline">
+                    <i class="fa-solid fa-comment-dots"></i> Read More Reviews
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION 8 — CTA WITH CONTACT PANEL
+         ============================================================ -->
+    <section class="rooms-cta section-wrapper">
+        <div class="container">
+            <div class="rooms-cta-inner">
+                <div data-aos="fade-right" data-aos-duration="900">
+                    <div class="rooms-cta-tag">
+                        <i class="fa-solid fa-key"></i> Book Your Stay
+                    </div>
+                    <h2 data-aos="fade-up" data-aos-delay="100">
+                        Ready to <span>Check In?</span>
+                    </h2>
+                    <p data-aos="fade-up" data-aos-delay="200">
+                        Book directly with us and enjoy the best rates, complimentary upgrades when available, and flexible cancellation.
+                    </p>
+                    <div class="rooms-cta-buttons" data-aos="fade-up" data-aos-delay="300">
+                        <a href="404.html" class="btn btn-primary">
+                            <i class="fa-solid fa-calendar-check"></i> Book a Room
+                        </a>
+                        <a href="404.html" class="btn btn-ghost">
+                            <i class="fa-solid fa-phone"></i> Call Us
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rooms-cta-contact" data-aos="fade-left" data-aos-duration="900">
+                    <h4>Contact Reservations</h4>
+
+                    <div class="contact-line">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <strong>Call Us</strong>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-line">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong>
+                            <span>bookings@restaurant-hotel.com</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-line">
+                        <i class="fa-solid fa-clock"></i>
+                        <div>
+                            <strong>Reception Hours</strong>
+                            <span>24/7 Front Desk</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER PLACEHOLDER ===== -->
+    <div id="footer-placeholder"></div>
+
+    <!-- ===== AOS JS ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 80, delay: 0 });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('header.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('header-placeholder').innerHTML = d; initHeader();
+            }).catch(() => {});
+            fetch('footer.html').then(r => r.ok ? r.text() : Promise.reject()).then(d => {
+                document.getElementById('footer-placeholder').innerHTML = d; initFooter();
+            }).catch(() => {});
+            initImageLoaded();
+            initTabs();
+        });
+
+        function initHeader() {
+            const menuBtn = document.getElementById('menuBtn');
+            const closeBtn = document.getElementById('closeBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const header = document.getElementById('mainHeader');
+            if (menuBtn && mobileMenu && mobileOverlay) {
+                menuBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    mobileMenu.classList.add('open'); mobileOverlay.classList.add('open');
+                    document.body.style.overflow = 'hidden'; });
+            }
+            if (closeBtn && mobileMenu && mobileOverlay) {
+                closeBtn.addEventListener('click', e => { e.preventDefault();
+                    mobileMenu.classList.remove('open'); mobileOverlay.classList.remove('open');
+                    document.body.style.overflow = 'auto'; });
+            }
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', e => { e.preventDefault();
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    mobileOverlay.classList.remove('open'); document.body.style.overflow = 'auto'; });
+            }
+            if (header) window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 20));
+        }
+
+        function initFooter() {
+            const footerHamburger = document.getElementById('mobileHamburger');
+            const footerNavMenu = document.getElementById('mobileNavMenu');
+            if (footerHamburger && footerNavMenu) {
+                const nh = footerHamburger.cloneNode(true);
+                footerHamburger.parentNode.replaceChild(nh, footerHamburger);
+                nh.addEventListener('click', e => { e.preventDefault(); e.stopPropagation();
+                    footerNavMenu.classList.toggle('open'); });
+            }
+        }
+
+        function initImageLoaded() {
+            document.querySelectorAll('img').forEach(img => {
+                const markLoaded = () => {
+                    const parent = img.closest('.img-wrap');
+                    if (parent) parent.classList.add('img-loaded');
+                };
+                if (img.complete && img.naturalWidth > 0) markLoaded();
+                else img.addEventListener('load', markLoaded);
+            });
+        }
+
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const tabId = this.getAttribute('data-tab');
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = document.getElementById('tab-' + tabId);
+                    if (target) target.classList.add('active');
+                });
+            });
+        }
+
+        window.addEventListener('load', () => { document.body.style.overflowX = 'hidden'; });
+    </script>
+
+</body>
+</html>
